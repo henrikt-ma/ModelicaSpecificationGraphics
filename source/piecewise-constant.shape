@@ -1,0 +1,37 @@
+##needs ..Applications..Blockdraw
+##needs discrete-time-elements.shext
+
+##lookin ..Shapes
+##lookin ..Shapes..Graphics
+##lookin ..Shapes..Geometry
+##lookin ..Applications..Blockdraw
+
+x0: [xAxisPth 0.3].p.x
+x1: [xAxisPth 0.6].p.x
+x2: [xAxisPth 0.8].p.x
+
+y0: [yAxisPth 0.55].p.y
+y1: [yAxisPth 0.75].p.y
+
+pth0: (x0,y0)--(x1,(+0m))
+pth1: (x1,y1)--(x2,(+0m))
+
+IO..#page << axes
+IO..#page << [tHelper x0 [TeX `$t_{0}$´]]
+IO..#page << [tHelper x1 [TeX `$t_{1}$´]]
+IO..#page << [tHelper x2 [TeX `$t_{2}$´]]
+
+Traits..@width:1bp & Traits..@stroke:green & Traits..@cap:Traits..Cap..BUTT
+|
+{
+  IO..#page << [stroke pth0]
+  IO..#page << [stroke pth1]
+}
+
+Traits..@width:0.5bp
+|
+{
+  IO..#page << [putlabelAbove [TeX `$m(t)$´] [pth0 0.15].p ~1]
+  IO..#page << { pth: [reverse pth0.end.p--(+(~6mm,~9mm))]  [stroke pth.begin--[pth [Numeric..Math..abs pth] - 1mm] head:ShapesArrow] & [putlabelBelow [TeX `$m^{-}(t_{1})$´] pth.begin.p 0] }
+  IO..#page << { pth: [reverse pth1.begin.p--(+(6mm,~9mm))]  [stroke pth.begin--[pth [Numeric..Math..abs pth] - 1mm] head:ShapesArrow] & [putlabelBelow [TeX `$m(t_{1})$´] pth.begin.p 0] }
+}

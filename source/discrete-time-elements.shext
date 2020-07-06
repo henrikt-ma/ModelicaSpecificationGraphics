@@ -1,0 +1,30 @@
+##needs ..Applications..Blockdraw
+
+##lookin ..Shapes
+##lookin ..Shapes..Graphics
+##lookin ..Shapes..Geometry
+##lookin ..Applications..Blockdraw
+
+xAxisPth: (~3mm,0mm)--(45mm,0mm)
+yAxisPth: (0mm,~3mm)--(0mm,45mm * Numeric..Constant..Golden)
+
+tHelperStyle: Traits..@width:0.2bp
+  & Traits..@stroke:[Traits..gray 0.25]
+  & Traits..@dash:[Traits..dashpattern 2bp 2bp]
+green: [Traits..rgb 0.09 0.44 0]
+red: [Traits..rgb 0.98 0 0.02]
+
+tHelper: \ x lbl →
+{
+  pth: yAxisPth >> [shift (x, 0)]
+  tHelperStyle | [stroke pth] & [putlabelBelow lbl pth.begin.p 0]
+}
+
+axes:
+  Traits..@width:1bp
+  |
+  ( Graphics..newGroup
+    << [stroke xAxisPth head:ShapesArrow]
+    << [stroke yAxisPth head:ShapesArrow]
+    << [putlabelBelow [TeX `time $t$´] xAxisPth.end.p 0]
+  )

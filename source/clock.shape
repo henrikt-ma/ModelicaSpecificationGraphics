@@ -1,0 +1,28 @@
+##needs ..Applications..Blockdraw
+##needs discrete-time-elements.shext
+
+##lookin ..Shapes
+##lookin ..Shapes..Graphics
+##lookin ..Shapes..Geometry
+##lookin ..Applications..Blockdraw
+
+x0: [xAxisPth 0.2].p.x
+x1: [xAxisPth 0.4].p.x
+x2: [xAxisPth 0.55].p.x
+x3: [xAxisPth 0.75].p.x
+
+yClock: [yAxisPth 0.3].p.y
+markSize: 3bp
+mark: Traits..@width:0.5bp & Traits..@fill:green | [fillstroke [circle markSize]]
+
+IO..#page << axes
+IO..#page << [tHelper x0 [TeX `$t_{0}$´]]
+IO..#page << [tHelper x1 [TeX `$t_{1}$´]]
+IO..#page << [tHelper x2 [TeX `$t_{2}$´]]
+IO..#page << [tHelper x3 [TeX `$t_{3}$´]]
+
+IO..#page << [[shift (x1,yClock)] mark]
+IO..#page << [[shift (x2,yClock)] mark]
+IO..#page << [[shift (x3,yClock)] mark]
+
+IO..#page << [putlabelAbove [TeX `$c(t_{i})$´] (x1-markSize,yClock) 1]

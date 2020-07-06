@@ -1,0 +1,49 @@
+##needs ..Applications..Blockdraw
+##needs discrete-time-elements.shext
+
+##lookin ..Shapes
+##lookin ..Shapes..Graphics
+##lookin ..Shapes..Geometry
+##lookin ..Applications..Blockdraw
+
+x0: [xAxisPth 0.2].p.x
+x1: [xAxisPth 0.4].p.x
+x2: [xAxisPth 0.55].p.x
+x3: [xAxisPth 0.75].p.x
+
+y1: [yAxisPth 0.5].p.y
+y2: [yAxisPth 0.75].p.y
+y3: [yAxisPth 0.6].p.y
+
+pth1: (x1,y1)--(x2,(+0m))
+pth2: (x2,y2)--(x3,(+0m))
+pth3: (x3,y3)--(xAxisPth.end.p.x,(+0m))
+
+yClock: [yAxisPth 0.3].p.y
+markSize: 3bp
+
+IO..#page << axes
+IO..#page << [tHelper x0 [TeX `$t_{0}$´]]
+IO..#page << [tHelper x1 [TeX `$t_{1}$´]]
+IO..#page << [tHelper x2 [TeX `$t_{2}$´]]
+IO..#page << [tHelper x3 [TeX `$t_{3}$´]]
+
+{
+  mark: Traits..@width:0.5bp & Traits..@fill:green | [fillstroke [circle markSize]]
+  Traits..@width:1bp & Traits..@dash:[Traits..dashpattern 3bp 3bp] & Traits..@stroke:green & Traits..@cap:Traits..Cap..BUTT
+  |
+  {
+    IO..#page << [stroke pth1] << [[shift (x1,y1)] mark]
+    IO..#page << [stroke pth2] << [[shift (x2,y2)] mark]
+    IO..#page << [stroke pth3] << [[shift (x3,y3)] mark]
+  }
+}
+IO..#page << [putlabelAbove [TeX `$r(t_{i})$´] (x1-markSize,y1) 1]
+
+{
+  mark: Traits..@width:0.5bp & Traits..@fill:red | [fillstroke [circle markSize]]
+  IO..#page << [[shift (x1,yClock)] mark]
+  IO..#page << [[shift (x2,yClock)] mark]
+  IO..#page << [[shift (x3,yClock)] mark]
+}
+IO..#page << [putlabelAbove [TeX `$c(t_{i})$´] (x1-markSize,yClock) 1]

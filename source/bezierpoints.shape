@@ -1,0 +1,83 @@
+##needs ..Applications..Blockdraw
+
+##lookin ..Shapes
+##lookin ..Shapes..Graphics
+##lookin ..Shapes..Geometry
+##lookin ..Applications..Blockdraw
+
+##unit grid = 5mm
+
+p1: (2grid,2grid)
+p2: (3grid,6grid)
+p3: (7grid,2grid)
+p4: (8grid,6grid)
+
+p12: 0.5 * (p1 + p2)
+p23: 0.5 * (p2 + p3)
+p34: 0.5 * (p3 + p4)
+
+
+Traits..@width:0.3bp & Traits..@stroke:[Traits..gray 0.8] & Traits..@cap:Traits..Cap..BUTT
+|
+{
+  yHelper: [stroke (0m,0m)--(10grid,0m)]
+  IO..#page <<
+    [[Data..range '1 '7].foldl
+      \ p e → p & [[shift (0,e*1grid)] yHelper]
+      null
+    ]
+
+  xHelper: [stroke (0m,0m)--(0m,8grid)]
+  IO..#page <<
+    [[Data..range '1 '9].foldl
+      \ p e → p & [[shift (e*1grid,0)] xHelper]
+      null
+    ]
+}
+
+markSize: 0.3grid
+green: [Traits..rgb 0.21 1 0.04]
+
+squareMark:
+  Traits..@width:0.3bp & Traits..@fill:green
+  |
+  [fillstroke [rectangle (~0.5*markSize,~0.5*markSize) (0.5*markSize,0.5*markSize)]]
+
+roundMark:
+  Traits..@width:0.3bp & Traits..@fill:green
+  |
+  [fillstroke [circle 0.5*markSize]]
+
+
+/** Manual construction of quadratic Bezier spline:
+ ** Cubic handles at 2/3 distance from via-points to quadratic
+ ** control point.
+ **/
+pth: p1--p12>[Layout..mspoint p12--p2 2/3]--[Layout..mspoint p23--p2 2/3]<p23>[Layout..mspoint p23--p3 2/3]--[Layout..mspoint p34--p3 2/3]<p34--p4
+
+IO..#page
+  << Traits..@width:1.5bp | [stroke pth]
+  << Traits..@width:0.5bp & Traits..@stroke:green | [stroke p1--p2--p3--p4]
+  << squareMark >> [shift p1]
+  << squareMark >> [shift p2]
+  << squareMark >> [shift p3]
+  << squareMark >> [shift p4]
+  << roundMark >> [shift p12]
+  << roundMark >> [shift p23]
+  << roundMark >> [shift p34]
+
+
+  @abovelabelmargin: markSize + 0.5mm
+& @belowlabelmargin: markSize + 0.5mm
+& @leftrightlabelmargin: markSize + 0.2mm
+|
+{
+  IO..#page
+    << [putlabelBelow [TeX `$P_{1}$´] p1 0]
+    << [putlabelAbove [TeX `$P_{2}$´] p2 0]
+    << [putlabelBelow [TeX `$P_{3}$´] p3 0]
+    << [putlabelAbove [TeX `$P_{4}$´] p4 0]
+    << [putlabelLeft [TeX `$P_{12}$´] p12 0]
+    << [putlabelRight [TeX `$P_{23}$´] p23 ~1]
+    << [putlabelRight [TeX `$P_{34}$´] p34 0]
+}
