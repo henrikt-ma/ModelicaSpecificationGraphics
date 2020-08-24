@@ -1,0 +1,52 @@
+##preamble \usepackage{mlsstyle}
+
+##lookin ..Shapes
+##lookin ..Shapes..Graphics
+##lookin ..Shapes..Geometry
+
+/** Gridlines to help shaping paths.
+ **/
+|**hilne: (~3cm,0)--(6cm,0)
+|**vilne: (0,~4cm)--(0,3cm)
+|**Traits..@width:1bp
+|**|
+|**{
+|**  IO..#page << [Graphics..stroke hilne] << [Graphics..stroke vilne]
+|**}
+|**Traits..@width:0.2bp
+|**|
+|**{
+|**  IO..#page <<
+|**    [[Data..range ~4cm 3cm 1cm].foldl
+|**      \ p e → p & [Graphics..stroke [[shift (0,e)] hilne]]
+|**      null
+|**    ]
+|**
+|**  IO..#page <<
+|**    [[Data..range ~3cm 6cm 1cm].foldl
+|**      \ p e → p & [Graphics..stroke [[shift (e,0)] vilne]]
+|**      null
+|**    ]
+|**}
+
+
+  Traits..@width:0.3bp
+& Geometry..@defaultunit:1%C
+|
+{
+  pthR: (^)<(0cm,1cm)>(^)--(^)<(4cm,1cm)>(^)--(^)<(6cm,~2cm)>(^)--(^)<(2cm,~4cm)>(^)--(^)<(~3cm,~1cm)>(^)--cycle
+  pthR2: (^)<(0.5cm,~1cm)>(^)--(^)<(4cm,~1cm)>(^)--(^)<(5.5cm,~2cm)>(^)--(^)<(3cm,~3.5cm)>(^)--(^)<(1cm,~3cm)>(^)--(^)<(~0.5cm,~2.5cm)>(^)--cycle
+
+  /** Visualize control points to help shaping paths. **/
+|**IO..#page << (Traits..@stroke:[Traits..gray 0.5]|[Graphics..stroke [Geometry..controlling pthR]])
+|**IO..#page << (Traits..@stroke:[Traits..gray 0.5]|[Graphics..stroke [Geometry..controlling pthR2]])
+
+  IO..#page << Traits..@fill:[Traits..gray 0.85] | [Graphics..fillstroke pthR]
+  IO..#page << Traits..@fill:[Traits..gray 0.95] | [Graphics..fillstroke pthR2]
+}
+
+IO..#page << [TeX `\begin{minipage}{5cm}\center Type \lstinline!R!: Records with at least components named \lstinline!x! and \lstinline!b!\end{minipage}´] >> [shift (~1cm,0)]
+IO..#page << [TeX `instance \lstinline!r!´] >> [shift (~2cm,~1cm)]
+
+IO..#page << [TeX `\begin{minipage}{5cm}\center Type \lstinline!R2!: Records with at least components named \lstinline!x!, \lstinline!b! and \lstinline!y!\end{minipage}´] >> [shift (0,~2cm)]
+IO..#page << [TeX `instance \lstinline!r2!´] >> [shift (2cm,~3cm)]

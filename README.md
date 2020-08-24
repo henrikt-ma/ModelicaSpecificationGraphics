@@ -16,6 +16,10 @@ These are the graphics provided by this repository (SVG shown inline, with links
 
 ![Clocked](products/clocked.svg) [PDF](products/clocked.pdf) [source](source/clocked.shape)
 
+### Interface or Type Relationships
+
+![Subtype relation](products/subtype.svg) [PDF](products/subtype.pdf) [source](source/subtype.shape)
+
 ### Annotations for Graphical Objects
 
 ![smooth = Bezier](products/bezierpoints.svg) [PDF](products/bezierpoints.pdf) [source](source/bezierpoints.shape)
