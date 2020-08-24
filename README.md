@@ -20,6 +20,10 @@ These are the graphics provided by this repository (SVG shown inline, with links
 
 ![Subtype relation](products/subtype.svg) [PDF](products/subtype.pdf) [source](source/subtype.shape)
 
+### Connectors
+
+![Inside and outside connectors](products/innerouterconnector.svg) [PDF](products/innerouterconnector.pdf) [source](source/innerouterconnector.shape)
+
 ### Annotations for Graphical Objects
 
 ![smooth = Bezier](products/bezierpoints.svg) [PDF](products/bezierpoints.pdf) [source](source/bezierpoints.shape)

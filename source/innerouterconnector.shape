@@ -1,0 +1,130 @@
+##preamble \usepackage{mlsstyle}
+
+##needs ..Shapes..Layout / centering-X
+##needs ..Applications..Blockdraw
+
+##lookin ..Shapes
+##lookin ..Shapes..Graphics
+##lookin ..Shapes..Geometry
+
+##lookin ..Applications..Blockdraw
+
+/** Gridlines to help shaping paths.
+ **/
+|**hilne: (~3cm,0)--(6cm,0)
+|**vilne: (0,~4cm)--(0,3cm)
+|**Traits..@width:1bp
+|**|
+|**{
+|**  IO..#page << [Graphics..stroke hilne] << [Graphics..stroke vilne]
+|**}
+|**Traits..@width:0.2bp
+|**|
+|**{
+|**  IO..#page <<
+|**    [[Data..range ~4cm 3cm 1cm].foldl
+|**      \ p e → p & [Graphics..stroke [[shift (0,e)] hilne]]
+|**      null
+|**    ]
+|**
+|**  IO..#page <<
+|**    [[Data..range ~3cm 6cm 1cm].foldl
+|**      \ p e → p & [Graphics..stroke [[shift (e,0)] vilne]]
+|**      null
+|**    ]
+|**}
+
+/** Position connectors.
+ **/
+m1c: (~1.5cm,1cm)
+m2c: (~1.5cm,~1cm)
+m4c: (1.2cm,1cm)
+m5c: (1.2cm,~1.3cm)
+m3c: (0cm,0cm)
+doc: (4cm,0cm)
+dic: (7cm,0.3cm)
+m7c: dic + (0cm,~1.5cm)
+
+connector_circle: [circle 1.5mm]
+connector_width: 0.6bp
+black_connector: Traits..@width:connector_width | [Graphics..fillstroke connector_circle]
+gray_connector: Traits..@width:connector_width & Traits..@fill:[Traits..gray 0.8] | [Graphics..fillstroke connector_circle]
+
+di: black_connector >> [shift dic]
+do: gray_connector >> [shift doc]
+
+boxrx: 7mm
+boxry: 4mm
+
+m3Pth: [rectangle (0cm,~2cm) (5cm,2cm)]
+m0Pth: [rectangle (~4cm,~2.3cm) (5.5cm,2.3cm)]
+m6Pth: [rectangle (~4.3cm,~2.6cm) (8.5cm,2.6cm)]
+
+Traits..@width:0.3bp
+|
+{
+  m1:
+    [Layout..center_x [Layout..Xcenter_y [TeX `\lstinline!m1!´]]]
+    &
+    [Graphics..stroke [rectangle (~boxrx,~boxry) (boxrx,boxry)]]
+  m2:
+    [Layout..center_x [Layout..Xcenter_y [TeX `\lstinline!m2!´]]]
+    &
+    [Graphics..stroke [rectangle (~boxrx,~boxry) (boxrx,boxry)]]
+  m4:
+    [Layout..center_x [Layout..Xcenter_y [TeX `\lstinline!m4!´]]]
+    &
+    [Graphics..stroke [rectangle (~boxrx,~boxry) (boxrx,boxry)]]
+  m5:
+    [Layout..center_x [Layout..Xcenter_y [TeX `\lstinline!m5!´]]]
+    &
+    [Graphics..stroke [rectangle (~boxrx,~boxry) (boxrx,boxry)]]
+  m7:
+    [Layout..center_x [Layout..Xcenter_y [TeX `\lstinline!m7!´]]]
+    &
+    [Graphics..stroke [rectangle (~boxrx,~boxry) (boxrx,boxry)]]
+
+  m0:
+    ([Layout..center_x [Layout..Xcenter_y [TeX `\lstinline!m0!´]]] >> [shift ([Layout..xmin m0Pth] + boxrx, [Layout..ymax m0Pth] - boxry)])
+    &
+    [Graphics..stroke m0Pth]
+  m3:
+    ([Layout..center_x [Layout..Xcenter_y [TeX `\lstinline!m3!´]]] >> [shift ([Layout..xmax m3Pth] - boxrx, [Layout..ymax m3Pth] - boxry)])
+    &
+    [Graphics..stroke m3Pth]
+  m6:
+    ([Layout..center_x [Layout..Xcenter_y [TeX `\lstinline!m6!´]]] >> [shift ([Layout..xmax m6Pth] - boxrx, [Layout..ymax m6Pth] - boxry)])
+    &
+    [Graphics..stroke m6Pth]
+
+  IO..#page << [Layout..center_x m1 x:1] >> [shift m1c]
+  IO..#page << [Layout..center_x m2 x:1] >> [shift m2c]
+  IO..#page << [Layout..center_x m4 x:~1] >> [shift m4c]
+  IO..#page << [Layout..center_x m5 x:~1] >> [shift m5c]
+  IO..#page << [Layout..center_y m7 y:1] >> [shift m7c]
+  IO..#page << m3 << m0 << [Layout..enlarge_bleedbox m6 (1mm,1mm)]
+
+  IO..#page << [putlabelBelow [TeX `\lstinline!c!´] [bottompoint [[shift m3c] black_connector] 3 3] ~1]
+  IO..#page << [putlabelAbove [TeX `\lstinline!inner d!´] [toppoint di] 0]
+  IO..#page << [putlabelAbove [TeX `\lstinline!outer d!´] [toppoint do] 0]
+}
+
+Traits..@width:connector_width
+|
+{
+  IO..#page << [Graphics..stroke m3c--m1c]
+  IO..#page << [Graphics..stroke m3c--m2c]
+  IO..#page << [Graphics..stroke m3c--m4c]
+  IO..#page << [Graphics..stroke m3c--m5c]
+  IO..#page << [Graphics..stroke m3c--doc]
+  IO..#page << Traits..@dash:[Traits..dashpattern 3bp 3bp] | [Graphics..stroke doc--dic]
+  IO..#page << [Graphics..stroke dic--m7c]
+  IO..#page << black_connector >> [shift m1c]
+  IO..#page << black_connector >> [shift m2c]
+  IO..#page << black_connector >> [shift m4c]
+  IO..#page << black_connector >> [shift m5c]
+  IO..#page << black_connector >> [shift m3c]
+  IO..#page << do
+  IO..#page << di
+  IO..#page << black_connector >> [shift m7c]
+}
