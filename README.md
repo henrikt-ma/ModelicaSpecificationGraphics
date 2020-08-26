@@ -8,7 +8,7 @@ This repository contains files needed to generate some of the graphics used in t
 
 These are the graphics provided by this repository (SVG shown inline, with links to PDF variant and source code).
 
-In addition, unrelated to the figures of the Modelica specification, this repository is also [home to some examples](docs/SVG_Bitmap/) of different ways an SVG image can be used in a Modelica icon or diagram.
+In addition, unrelated to the figures of the Modelica specification, this repository is also [home to some examples](https://henrikt-ma.github.io/ModelicaSpecificationGraphics/SVG_Bitmap/) of different ways an SVG image can be used in a Modelica icon or diagram, served as GitHub pages.
 
 ### Different kinds of discrete-time variables
 
