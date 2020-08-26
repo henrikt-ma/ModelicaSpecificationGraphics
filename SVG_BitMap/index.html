@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Outermost SVG element sizing examples</h1>
+<p>These examples are provided in order to show that having an SVG image in an <tt>BitMap</tt> graphical element makes sense regardless of the presence of sizing-related attributes.</p>
+<p>In these HTML examples, the &lt;img&gt; tag serves the same role as the <tt>BitMap</tt> in Modelica.  That the <tt>BitMap</tt> has a mandatory <tt>extent</tt> corresponds to using an &lt;img&gt; tag with <tt>width</tt> and <tt>height</tt> specified.  The examples where the &lt;img&gt; tag doesn't have <tt>width</tt> and <tt>height</tt> are provided to illustrate that a Modelica tool could help the user selecting an <tt>extent</tt> matching the intrinsic size of an SVG image in these cases.</p>
+
+<h2>SVG with <tt>width</tt>, <tt>height</tt>, and <tt>viewBox</tt></h2>
+<p>
+Because of the <tt>viewBox</tt>, the content is scaled to fit the extent of the &lt;img&gt; tag.  The coordinate system is unrelated to <tt>width</tt> and <tt>height</tt>, which only serve as a way of defining the intrinsic size.  Overriding the intrinsic size with a small square box:<br>
+<img width="100" height="100" src="sized.svg" />
+</p>
+
+<p>
+Not specifying the extent of the &lt;img&gt; tag lets the intrinsic size come into play:<br>
+<img src="sized.svg" />
+</p>
+
+<h2>SVG with only <tt>viewBox</tt></h2>
+<p>
+As long as there is a <tt>viewBox</tt>, removing the <tt>width</tt> and <tt>height</tt> has no effect on the coordinate systems:<br>
+<img width="100" height="100" src="nosize.svg" />
+</p>
+
+<h2>SVG with only <tt>width</tt> and <tt>height</tt></h2>
+<p>
+Without the <tt>viewBox</tt>, the <tt>width</tt> and <tt>height</tt> define the visible part of the SVG canvas, and the visible part is mapped to the extend of the &lt;img&gt; tag:<br>
+<img width="100" height="100" src="no_viewBox.svg" />
+</p>
+
+<p>
+Not specifying the extent of the &lt;img&gt; tag lets the intrinsic size come into play:<br>
+<img src="no_viewBox.svg" />
+</p>
+
+<h2>SVG with neither <tt>width</tt>, <tt>height</tt>, nor <tt>viewBox</tt></h2>
+<p>
+The SVG canvas is painted without transformation, and the extent of &lt;img&gt; tag determines the visible part of the canvas.  As our circle in the SVG image is centered at (750, 500) pixels, with a radius of 400 pixels, we need a big &lt;img&gt; tag in order to see something:<br>
+<img width="800" height="500" src="nothing.svg" />
+</p>
+
+</body>
+</html>

@@ -8,6 +8,8 @@ This repository contains files needed to generate some of the graphics used in t
 
 These are the graphics provided by this repository (SVG shown inline, with links to PDF variant and source code).
 
+In addition, unrelated to the figures of the Modelica specification, this repository is also [home to some examples](SVG_BitMap/) of different ways an SVG image can be used in a Modelica icon or diagram.
+
 ### Different kinds of discrete-time variables
 
 ![Piecewise constant](products/piecewise-constant.svg) [PDF](products/piecewise-constant.pdf) [source](source/piecewise-constant.shape)
