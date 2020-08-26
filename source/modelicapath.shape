@@ -1,0 +1,153 @@
+##preamble \usepackage{mlsstyle}
+
+##needs ..Shapes..Layout / centering-X
+##needs ..Applications..Blockdraw
+
+##lookin ..Shapes
+##lookin ..Shapes..Graphics
+##lookin ..Shapes..Geometry
+
+##lookin ..Applications..Blockdraw
+
+unnamedStyle: Traits..@width:0.15bp & Traits..@dash:[Traits..dashpattern 1.0mm 1.0mm]
+
+directoryDot: [Graphics..fill [circle 1mm]]
+dy: 1cm
+
+IO..•page << Traits..@width:2bp | [Graphics..stroke (0cm,0cm)--(14cm,0cm)]
+
+titlePoint: (7cm,1cm)
+IO..•page << [putlabelAbove [TeX `\lstinline{MODELICAPATH}´] titlePoint 0]
+IO..•page << Traits..@width:0.3bp | [Graphics..stroke titlePoint--(6.7cm,1bp) head:[ShapesArrow width:5bp ...]]
+
+Traits..@width:0.3bp
+|
+{
+  Modelica:
+  {
+    Mechanics:
+    {
+      Rotational:
+      {
+        (newGroup
+          << directoryDot
+          << [putlabelBelow [TeX `\filename{Rotational}´] [bottompoint directoryDot] 0.5]
+        )
+      }
+      Translational:
+      {
+        (newGroup
+          << directoryDot
+          << [putlabelBelow [TeX `\filename{Translational}´] [bottompoint directoryDot] ~0.5]
+        )
+      }
+      c1: (~0.3cm,~dy)
+      c2: (0.7cm,~dy)
+      c3: (~1.3cm,~dy)
+      (newGroup
+        << directoryDot
+        << [putlabelRight [TeX `\filename{Mechanics}´] [rightpoint directoryDot] 1]
+        << [[shift c1] Rotational]
+        << [[shift c2] Translational]
+        << [Graphics..stroke (0m,0m)--c1]
+        << [Graphics..stroke (0m,0m)--c2]
+        << unnamedStyle | [Graphics..stroke (0m,0m)--c3]
+      )
+    }
+    Blocks:
+    {
+      Interfaces:
+      {
+        (newGroup
+          << directoryDot
+          << [putlabelBelow [TeX `\filename{Interfaces}´] [bottompoint directoryDot] 0]
+        )
+      }
+      c1: (~0.5cm,~dy)
+      (newGroup
+        << directoryDot
+        << [putlabelRight [TeX `\filename{Blocks}´] [rightpoint directoryDot] 1]
+        << [[shift c1] Interfaces]
+        << [Graphics..stroke (0m,0m)--c1]
+      )
+    }
+    Math:
+    {
+      (newGroup
+        << directoryDot
+        << [putlabelRight [TeX `\filename{Math}´] [rightpoint directoryDot] 1]
+      )
+    }
+    Electrical:
+    {
+      c1: (~0.5cm,~dy)
+      c2: (0.5cm,~dy)
+      (newGroup
+        << directoryDot
+        << [putlabelRight [TeX `\filename{Electrical}´] [rightpoint directoryDot] 1]
+        << unnamedStyle | [Graphics..stroke (0m,0m)--c1]
+        << unnamedStyle | [Graphics..stroke (0m,0m)--c2]
+      )
+    }
+    c1: (~3cm,~dy)
+    c2: (~1.3cm,~dy)
+    c3: (1cm,~dy)
+    c4: (3cm,~dy)
+    c5: (~4cm,~dy)
+    (newGroup
+      << directoryDot
+      << [putlabelAbove [TeX `\filename{Modelica}´] [toppoint directoryDot] 0]
+      << [putlabelAbove [TeX `\filename{C:\textbackslash{}library}´] ([toppoint directoryDot] + (0,5mm)) 0]
+      << [[shift c1] Blocks]
+      << [[shift c2] Electrical]
+      << [[shift c3] Mechanics]
+      << [[shift c4] Math]
+      << [Graphics..stroke (0m,0m)--c1]
+      << [Graphics..stroke (0m,0m)--c2]
+      << [Graphics..stroke (0m,0m)--c3]
+      << [Graphics..stroke (0m,0m)--c4]
+      << unnamedStyle | [Graphics..stroke (0m,0m)--c5]
+    )
+  }
+  IO..•page << Modelica >> [shift (4cm,0)]
+
+  MyLib:
+  {
+    Pack1:
+    {
+      (newGroup
+        << directoryDot
+        << [putlabelBelow [TeX `\filename{Pack1}´] [bottompoint directoryDot] 0.3]
+      )
+    }
+    Pack2:
+    {
+      (newGroup
+        << directoryDot
+        << [putlabelBelow [TeX `\filename{Pack2}´] [bottompoint directoryDot] ~0.3]
+      )
+    }
+    c1: (~0.5cm,~dy)
+    c2: (0.5cm,~dy)
+    (newGroup
+      << directoryDot
+      << [putlabelAbove [TeX `\filename{MyLib}´] [toppoint directoryDot] 0]
+      << [putlabelAbove [TeX `\filename{C:\textbackslash{}lib1}´] ([toppoint directoryDot] + (0,5mm)) 0]
+      << [[shift c1] Pack1]
+      << [[shift c2] Pack2]
+      << [Graphics..stroke (0m,0m)--c1]
+      << [Graphics..stroke (0m,0m)--c2]
+    )
+  }
+  IO..•page << MyLib >> [shift (9.7cm,0)]
+
+  ComplexNumbers:
+  {
+    (newGroup
+      << directoryDot
+      << [putlabelAbove [TeX `\filename{ComplexNumbers.mo}´] [toppoint directoryDot] 0]
+      << [putlabelAbove [TeX `\filename{C:\textbackslash{}lib2}´] ([toppoint directoryDot] + (0,5mm)) 0]
+    )
+  }
+  IO..•page << ComplexNumbers >> [shift (12.5cm,0)]
+}

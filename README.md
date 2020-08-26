@@ -26,6 +26,10 @@ In addition, unrelated to the figures of the Modelica specification, this reposi
 
 ![Inside and outside connectors](products/innerouterconnector.svg) [PDF](products/innerouterconnector.pdf) [source](source/innerouterconnector.shape)
 
+### Packages
+
+![The MODELICAPATH](products/modelicapath.svg) [PDF](products/modelicapath.pdf) [source](source/modelicapath.shape)
+
 ### Synchronous
 
 ![Introductory example](products/plantmodel.svg) [PDF](products/plantmodel.pdf) [source](source/plantmodel.shape)
