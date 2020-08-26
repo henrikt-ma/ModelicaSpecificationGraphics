@@ -1,0 +1,76 @@
+##preamble \usepackage{mlsstyle}
+
+##needs ..Shapes..Layout / centering-X
+##needs ..Applications..Blockdraw
+
+##lookin ..Shapes
+##lookin ..Shapes..Graphics
+##lookin ..Shapes..Geometry
+
+##lookin ..Applications..Blockdraw
+
+hdash: [Traits..dashpattern 2.0mm 2.0mm]
+
+marginblock: \ xy content →
+{
+  content: [Layout..center ../content]
+  bb: [Layout..bbox content]
+  ( Traits..@width:@blocklw | [@blockpainter [Geometry..rectangle ([Layout..xmin bb]-xy.x,[Layout..ymin bb]-xy.y) ([Layout..xmax bb]+xy.x,[Layout..ymax bb]+xy.y)]] )
+  &
+  content
+}
+
+
+  @connectionlw: 0.8bp
+& @blocklw: 0.8bp
+& @connectpainter: [Graphics..stroke head:[ShapesArrow width:5bp ...] ...]
+|
+{
+
+F : [putblockOrigin IO..•page [marginblock (5bp,1bp) [TeX `\begin{minipage}{8cm}\lstinputlisting[language=modelica,frame=none]{plantmodel-controller.mo}\end{minipage}´]]]
+
+S : [putblockFarAbove IO..•page [marginblock (5bp,1bp) [TeX `\begin{minipage}{7cm}\lstinputlisting[language=modelica,frame=none]{plantmodel-sample.mo}\end{minipage}´]] F]
+
+G : [putblockFarLeft IO..•page [marginblock (5bp,1bp) [TeX `\begin{minipage}{5cm}\lstinputlisting[language=modelica,frame=none]{plantmodel-plant.mo}\end{minipage}´]] S]
+
+H : [putblockOrigin IO..•page [marginblock (5bp,1bp) [TeX `\begin{minipage}{3cm}\lstinputlisting[language=modelica,frame=none]{plantmodel-hold.mo}\end{minipage}´]] >> [shift ([toppoint G].x, [rightpoint F].y)]]
+
+{p : [connect IO..•page F H]
+ IO..•page << [putlabelAbove [TeX `\lstinline!ud!´] [Layout..mspoint p 0.5] 0]}
+
+{p : [llconnect IO..•page H G @blockspacenear]
+ IO..•page << [putlabelAbove [TeX `\lstinline!u!´] [Layout..mspoint p 0 @blockspacenear] 0]}
+
+{p : [connect IO..•page G S]
+ IO..•page << [putlabelAbove [TeX `\lstinline!y!´] [Layout..mspoint p 0.5] 0]}
+
+{p : [rrconnect IO..•page S F @blockspacenear]
+ IO..•page << [putlabelAbove [TeX `\lstinline!yd!´] [Layout..mspoint p 0 @blockspacenear] 0]}
+
+  Traits..@dash:hdash
+  |
+  {
+    EQ: [putblockBelow IO..•page [marginblock (5bp,~1bp) [TeX `%
+\setlength{\abovedisplayskip}{0pt}%
+\setlength{\belowdisplayskip}{0pt}%
+\begin{minipage}{6.5cm}%
+\begin{align*}
+t_{i} &\in \{\,0,\, 3,\, 6,\, \dotsc \,\},\, i = 0,\, 1,\, 2,\, \dotsc\\
+y_{\mathrm{d}}(t_{i}) &= y(t_{i}) \\
+E\, x_{\mathrm{d}}(t_{i}) &= A\, x_{\mathrm{d}}(t_{i - 1}) + B\, y_{\mathrm{d}}(t_{i}) \\
+    u_{\mathrm{d}}(t_{i}) &= C\, x_{\mathrm{d}}(t_{i - 1}) + D\, y_{\mathrm{d}}(t_{i}) \\
+    u(t) &= u_{\mathrm{d}}(t_{i}), \quad t_{i} \leq t < t_{i + 1}
+\end{align*}%
+\end{minipage}´]] >> [shift (5mm,0)] H 2cm]
+    Traits..@width: 0.3bp
+    |
+    {
+      ah: [ShapesArrow width:5bp ...]
+      IO..•page << [Graphics..stroke [toppoint EQ 5 3]--[bottompoint H] head:ah]
+      IO..•page << [Graphics..stroke [toppoint EQ 5 4]--[leftpoint S 1 0] head:ah]
+      IO..•page << [Graphics..stroke [toppoint EQ 5 5]--[bottompoint F 1 0.2] head:ah]
+    }
+  }
+
+
+}

@@ -1,6 +1,11 @@
 % This file is a temporary solution, containing copies of parts of the
 % preample.tex used by the mls.tex document.
 
+\usepackage[fleqn]{amsmath} % Warning preamble.tex doesn't specify 'fleqn'.
+
+% Warning: Don't set these lengths to zero in preamble.tex.
+\setlength{\mathindent}{0pt}
+
 \usepackage{color}
 \usepackage[table]{xcolor}
 \usepackage{listings}
@@ -51,7 +56,8 @@
   language=[short]modelica,     % Language that will be used by default, in particluar by plain \lstinline.
   showstringspaces=false,
   frame=lrtb, %
-  xleftmargin=\fboxsep, %
-  xrightmargin=-\fboxsep, %
-  belowskip=0pt, %
+  xleftmargin=0pt, % Warning: Different than in preamble.tex.
+  xrightmargin=0pt, % Warning: Different than in preamble.tex.
+  belowskip=0pt, % Warning: Different than in preamble.tex.
+  aboveskip=0pt, % Warning: Different than in preamble.tex.
 }
