@@ -26,6 +26,8 @@ In addition, unrelated to the figures of the Modelica specification, this reposi
 
 ![Inside and outside connectors](products/innerouterconnector.svg) [PDF](products/innerouterconnector.pdf) [source](source/innerouterconnector.shape)
 
+![Overconstrained connection graph](products/overconstrained.svg) [PDF](products/overconstrained.pdf) [source](source/overconstrained.shape)
+
 ### Packages
 
 ![The MODELICAPATH](products/modelicapath.svg) [PDF](products/modelicapath.pdf) [source](source/modelicapath.shape)

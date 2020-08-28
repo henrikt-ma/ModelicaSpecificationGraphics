@@ -1,0 +1,120 @@
+##preamble \usepackage{mlsstyle}
+
+##needs ..Shapes..Layout / centering-X
+##needs ..Applications..Blockdraw
+
+##lookin ..Shapes
+##lookin ..Shapes..Graphics
+##lookin ..Shapes..Geometry
+
+##lookin ..Applications..Blockdraw
+
+connectWidth: Traits..@width:0.8bp
+breakableStyle: connectWidth & Traits..@dash:[Traits..dashpattern 1.0mm 1.0mm]
+nonbreakableStyle: connectWidth
+
+ring: [circle 2mm]
+node: connectWidth & Traits..@fill:[Traits..gray 1] | [Graphics..fillstroke ring]
+root: connectWidth & Traits..@fill:[Traits..gray 0.6] | [Graphics..fillstroke ring]
+potentialRoot: connectWidth & Traits..@fill:[Traits..gray 0] | [Graphics..fillstroke ring]
+wiggly:
+  @defaultunit:1%C & Traits..@width:0.3bp
+  |
+  [Graphics..stroke (~4mm,0mm)>(^)--(^)<(~2mm,1mm)>(^)--(^)<(0mm,0mm)>(^)--(^)<(2mm,~1mm)>(^)--(^)<(4mm,0mm)>(^)] >> [rotate 1.5]
+
+putNode: \ •dst z n lbl →
+{
+  res: [[shift z] (n & [Tag..tag 'center (0m,0m)])]
+  •dst << res
+|**  •dst << [putlabelAbove (Text..newText << lbl) [toppoint res] 0]
+  res
+}
+
+legend:
+{
+  legendRow: \ icon label →
+  {
+    [[shift (0.5cm,0)] icon]
+    &
+    [[shift (1.2cm,0)] [Layout..Xcenter_y label]]
+  }
+  putRowBelow: \ •dst newRow oldRow → {
+    res: [[shift (0, [Layout..ymin [Layout..bbox oldRow]] - [Layout..ymax [Layout..bbox newRow]] - 2mm)] newRow]
+    •dst << res
+    res
+  }
+  connectionSeg: (~5mm,0)--(5mm,0)
+  •legend: newGroup
+  row0: [putblockOrigin •legend [legendRow node [TeX `Node´]]]
+  row1: [putRowBelow •legend [legendRow root [TeX `Root´]] row0]
+  row2: [putRowBelow •legend [legendRow potentialRoot [TeX `Potential root´]] row1]
+  row3: [putRowBelow •legend [legendRow (nonbreakableStyle|[Graphics..stroke connectionSeg]) [TeX `\begin{minipage}{4cm}Nonbreakable branch\\(\lstinline!Connections.branch!)\end{minipage}´]] row2]
+  row4: [putRowBelow •legend [legendRow (breakableStyle|[Graphics..stroke connectionSeg]) [TeX `\begin{minipage}{4cm}Breakable branch\\(\lstinline!connect!)\end{minipage}´]] row3]
+  row5: [putRowBelow •legend [legendRow (breakableStyle|[Graphics..stroke connectionSeg] & wiggly) [TeX `\begin{minipage}{4cm}Removed breakable\\branch to get tree\end{minipage}´]] row4]
+  •legend << Traits..@width:0.5bp | [Graphics..stroke [Layout..bbox [Layout..bboxed_enlarge (•legend) (2mm,2mm)]]]
+  freeze •legend
+}
+
+•nodeLayer: newGroup
+n0: [putNode •nodeLayer (0cm,0cm) root `0´]
+n1: [putNode •nodeLayer (~1cm,2cm) node `1´]
+n2: [putNode •nodeLayer (~0.5cm,4cm) node `2´]
+n3: [putNode •nodeLayer (1.2cm,1cm) node `3´]
+n4: [putNode •nodeLayer (1cm,3cm) node `4´]
+n5: [putNode •nodeLayer (1.5cm,4.5cm) potentialRoot `5´]
+n6: [putNode •nodeLayer (2.6cm,~0.2cm) root `6´]
+n7: [putNode •nodeLayer (3cm,1.5cm) node `7´]
+n8: [putNode •nodeLayer (2.7cm,3.5cm) node `8´]
+
+n9: [putNode •nodeLayer (4cm,2cm) node `9´]
+n10: [putNode •nodeLayer (4.2cm,3.7cm) potentialRoot `10´]
+n11: [putNode •nodeLayer (6cm,2.3cm) node `11´]
+n12: [putNode •nodeLayer (6.3cm,4.1cm) node `12´]
+n13: [putNode •nodeLayer (7cm,1.5cm) potentialRoot `13´]
+n14: [putNode •nodeLayer (7.3cm,3.0cm) node `14´]
+•nodeLayer << [putlabelBelow [TeX `selected root´] [bottompoint n0] 0]
+•nodeLayer << [putlabelRight [TeX `selected root´] [rightpoint n6] 0]
+{
+  n10LabelPoint: [toppoint n10] + (~0.2cm,0.6cm)
+  •nodeLayer << [putlabelAbove [TeX `selected (potential) root´] n10LabelPoint 0]
+  tmpPth: n10LabelPoint--[Tag..find n10 'center]
+  •nodeLayer << Traits..@width:0.3bp | [Graphics..stroke tmpPth.begin--(tmpPth.end - 2.5mm) head:[ShapesArrow width:4bp ...]]
+}
+nodeLayer: freeze •nodeLayer
+
+joinNonbreakable: \ a b →
+  nonbreakableStyle | [Graphics..stroke [Tag..find a 'center]--[Tag..find b 'center]]
+
+joinBreakable: \ a b →
+  breakableStyle | [Graphics..stroke [Tag..find a 'center]--[Tag..find b 'center]]
+
+joinRemoved: \ a b →
+  {
+    pth: [Tag..find a 'center]--[Tag..find b 'center]
+    breakableStyle | [Graphics..stroke pth]
+    &
+    (wiggly >> [rotate [angle pth.begin.T]] >> [shift [Layout..mspoint pth 0.5]])
+  }
+
+IO..•page << [joinRemoved n0 n1]
+IO..•page << [joinNonbreakable n1 n2]
+IO..•page << [joinBreakable n0 n3]
+IO..•page << [joinNonbreakable n3 n4]
+IO..•page << [joinNonbreakable n2 n4]
+IO..•page << [joinRemoved n2 n5]
+IO..•page << [joinNonbreakable n4 n5]
+IO..•page << [joinRemoved n3 n7]
+IO..•page << [joinRemoved n4 n8]
+IO..•page << [joinNonbreakable n6 n7]
+IO..•page << [joinNonbreakable n7 n8]
+
+IO..•page << [joinNonbreakable n9 n10]
+IO..•page << [joinRemoved n9 n11]
+IO..•page << [joinNonbreakable n10 n12]
+IO..•page << [joinBreakable n11 n12]
+IO..•page << [joinBreakable n13 n14]
+IO..•page << [joinNonbreakable n12 n14]
+
+IO..•page << nodeLayer
+
+IO..•page << legend >> [shift (8.5cm,4.5cm)]
