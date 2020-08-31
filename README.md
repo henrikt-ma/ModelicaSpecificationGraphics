@@ -28,6 +28,8 @@ In addition, unrelated to the figures of the Modelica specification, this reposi
 
 ![Overconstrained connection graph](products/overconstrained.svg) [PDF](products/overconstrained.pdf) [source](source/overconstrained.shape)
 
+![Fluid connection set](products/fluidsystem.svg) [PDF](products/fluidsystem.pdf) [source](source/fluidsystem.shape)
+
 ### Packages
 
 ![The MODELICAPATH](products/modelicapath.svg) [PDF](products/modelicapath.pdf) [source](source/modelicapath.shape)

@@ -1,0 +1,61 @@
+##preamble \usepackage{mlsstyle}
+
+##needs ..Shapes..Layout / centering-X
+##needs ..Applications..Blockdraw
+
+##lookin ..Shapes
+##lookin ..Shapes..Graphics
+##lookin ..Shapes..Geometry
+
+##lookin ..Applications..Blockdraw
+
+connectWidth: Traits..@width:0.8bp
+solderDot: [Graphics..fill [circle 1.5bp]]
+
+/** Variant of Layout..Xcenter_y, using lowercase instead of upper case 'X' for centering.
+ **/
+xcenter_y:
+ {thebb: [Layout..bbox [Graphics..TeX `$x$´]]
+  \ obj y:0 → [[Geometry..shift (0cm, ~(y+1)/2*[Layout..ymax thebb])] obj]}
+
+insideConnector: \ label →
+{
+  c:
+    (Traits..@width:@blocklw & Traits..@fill:Traits..BW..WHITE | [Graphics..fillstroke [rectangle (~2.2mm,~2.2mm) (2.2mm,2.2mm)]])
+    &
+    [Layout..center [TeX `\lstinline!c!´]]
+
+  (Traits..@width:@blocklw | [Graphics..stroke [rectangle (~0.7cm,~0.4cm) (0.7cm,0.4cm)]])
+  &
+  (label >> xcenter_y >> Layout..center_x) /** Note that Blockdraw..centerlabel is normally used for this kind of label. **/
+  &
+  [[shift (0.7cm,0)] c]
+}
+
+outsideConnector: \ label →
+{
+  (Traits..@width:@blocklw | [Graphics..stroke [rectangle (~0.4cm,~0.4cm) (0.4cm,0.4cm)]])
+  &
+  (label >> xcenter_y >> Layout..center_x) /** Note that Blockdraw..centerlabel is normally used for this kind of label. **/
+}
+
+dy: 1.3cm
+
+m1: [putblockOrigin IO..•page [insideConnector [TeX `$m_{1}$´]] >> [Layout..center_x x:1 ...] >> [shift (~1cm,~0*dy)]]
+m2: [putblockOrigin IO..•page [insideConnector [TeX `$m_{2}$´]] >> [Layout..center_x x:1 ...] >> [shift (~1cm,~1*dy)]]
+m3: [putblockOrigin IO..•page [insideConnector [TeX `$m_{3}$´]] >> [Layout..center_x x:1 ...] >> [shift (~1cm,~2*dy)]]
+
+c1: [putblockOrigin IO..•page [outsideConnector [TeX `$c_{\mathrm{q},1}$´]] >> [Layout..center_x x:~1 ...] >> [shift (1cm,~0.5cm-0*dy)]]
+c2: [putblockOrigin IO..•page [outsideConnector [TeX `$c_{\mathrm{q},2}$´]] >> [Layout..center_x x:~1 ...] >> [shift (1cm,~0.5cm-1*dy)]]
+
+connectWidth
+|
+{
+  IO..•page << [Graphics..stroke [rightpoint m1]--(0m,(+0m))--(0m,[rightpoint m3].y)--[rightpoint m3]]
+  IO..•page << [Graphics..stroke [rightpoint m2]--(0m,(+0m))]
+  IO..•page << [Graphics..stroke [leftpoint c1]--(0m,(+0m))]
+  IO..•page << [Graphics..stroke [leftpoint c2]--(0m,(+0m))]
+  IO..•page << solderDot >> [shift (0,[rightpoint m2].y)]
+  IO..•page << solderDot >> [shift (0,[leftpoint c1].y)]
+  IO..•page << solderDot >> [shift (0,[leftpoint c2].y)]
+}
