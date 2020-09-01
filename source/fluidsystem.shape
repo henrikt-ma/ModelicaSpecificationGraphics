@@ -34,7 +34,7 @@ insideConnector: \ label →
 
 outsideConnector: \ label →
 {
-  (Traits..@width:@blocklw | [Graphics..stroke [rectangle (~0.4cm,~0.4cm) (0.4cm,0.4cm)]])
+  (Traits..@width:@blocklw | [Graphics..stroke [rectangle (~0.3cm,~0.3cm) (0.3cm,0.3cm)]])
   &
   (label >> xcenter_y >> Layout..center_x) /** Note that Blockdraw..centerlabel is normally used for this kind of label. **/
 }
@@ -45,8 +45,8 @@ m1: [putblockOrigin IO..•page [insideConnector [TeX `$m_{1}$´]] >> [Layout..c
 m2: [putblockOrigin IO..•page [insideConnector [TeX `$m_{2}$´]] >> [Layout..center_x x:1 ...] >> [shift (~1cm,~1*dy)]]
 m3: [putblockOrigin IO..•page [insideConnector [TeX `$m_{3}$´]] >> [Layout..center_x x:1 ...] >> [shift (~1cm,~2*dy)]]
 
-c1: [putblockOrigin IO..•page [outsideConnector [TeX `$c_{\mathrm{q},1}$´]] >> [Layout..center_x x:~1 ...] >> [shift (1cm,~0.5cm-0*dy)]]
-c2: [putblockOrigin IO..•page [outsideConnector [TeX `$c_{\mathrm{q},2}$´]] >> [Layout..center_x x:~1 ...] >> [shift (1cm,~0.5cm-1*dy)]]
+c1: [putblockOrigin IO..•page [outsideConnector [TeX `$c_{1}$´]] >> [Layout..center_x x:~1 ...] >> [shift (1cm,~0.5cm-0*dy)]]
+c2: [putblockOrigin IO..•page [outsideConnector [TeX `$c_{2}$´]] >> [Layout..center_x x:~1 ...] >> [shift (1cm,~0.5cm-1*dy)]]
 
 connectWidth
 |
