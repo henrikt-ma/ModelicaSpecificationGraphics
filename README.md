@@ -30,6 +30,8 @@ In addition, unrelated to the figures of the Modelica specification, this reposi
 
 ![Fluid connection set](products/fluidsystem.svg) [PDF](products/fluidsystem.pdf) [source](source/fluidsystem.shape)
 
+![Common mixing enthalpy](products/fluidmix.svg) [PDF](products/fluidmix.pdf) [source](source/fluidmix.shape)
+
 ### Packages
 
 ![The MODELICAPATH](products/modelicapath.svg) [PDF](products/modelicapath.pdf) [source](source/modelicapath.shape)
