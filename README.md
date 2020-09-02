@@ -32,6 +32,8 @@ In addition, unrelated to the figures of the Modelica specification, this reposi
 
 ![Common mixing enthalpy](products/fluidmix.svg) [PDF](products/fluidmix.pdf) [source](source/fluidmix.shape)
 
+![Rationale for `inStream`](products/fluidmix3.svg) [PDF](products/fluidmix3.pdf) [source](source/fluidmix3.shape)
+
 ### Packages
 
 ![The MODELICAPATH](products/modelicapath.svg) [PDF](products/modelicapath.pdf) [source](source/modelicapath.shape)
