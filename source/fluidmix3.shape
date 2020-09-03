@@ -2,84 +2,78 @@
 
 ##needs ..Shapes..Layout / centering-X
 ##needs ..Applications..Blockdraw
+##needs fluidmix-common.shext
 
-##lookin ..Shapes
 ##lookin ..Shapes..Graphics
 ##lookin ..Shapes..Geometry
-
+##lookin ..Shapes..Layout
+##lookin ..Shapes..Traits
+##lookin ..Shapes..Data
+##lookin ..Shapes..IO
+##lookin ..Shapes..Numeric..Math
 ##lookin ..Applications..Blockdraw
-
-connectWidth: Traits..@width:0.8bp
-solderDot: [Graphics..fill [circle 1.5bp]]
-permeableDash: Traits..@dash: [Traits..dashpattern 2bp 2bp]
-
-blue: [Traits..rgb 0.68 0.85 0.87]
 
 box_ry: 7mm
 box_len: 38mm
-boxPth: [rectangle (0mm,~box_ry) (box_len,box_ry)] >> [shift (box_ry * [Numeric..Math..tan 30°], 0)]
+boxPth: [rectangle (0mm,~box_ry) (box_len,box_ry)] >> [shift (box_ry * [tan 30°], 0)]
 
 leftBox: \ lbl →
   {
-    [[shift (2mm, 0)] [Layout..center_y lbl]]
-  } >> [shift (box_ry * [Numeric..Math..tan 30°], 0)]
+    [[shift (2mm, 0)] [center_y lbl]]
+  } >> [shift (box_ry * [tan 30°], 0)]
 
 rightBox: \ lbl →
   {
-    [[shift (2mm - box_len, 0)] [Layout..center_y lbl]]
-  } >> [shift (~box_ry * [Numeric..Math..tan 30°], 0)]
+    [[shift (2mm - box_len, 0)] [center_y lbl]]
+  } >> [shift (~box_ry * [tan 30°], 0)]
 
 openBox: [boxPth 0]--[boxPth 2]
 border:
-  [[Data..range '0 '2].foldl \ p e → p--(openBox >> [rotate e * 120°]) emptypath]--cycle
+  [[range '0 '2].foldl \ p e → p--(openBox >> [rotate e * 120°]) emptypath]--cycle
 permeablePth:
-  [[Data..range '0 '2].foldl \ p e → p--[[rotate e * 120°] [boxPth 0].p] emptypath]--cycle
+  [[range '0 '2].foldl \ p e → p--[[rotate e * 120°] [boxPth 0].p] emptypath]--cycle
 
-IO..•page << Traits..@fill:blue & Traits..@width:0.3bp | [Graphics..fillstroke border]
-IO..•page << permeableDash & Traits..@width:0.3bp | [Graphics..stroke permeablePth]
-IO..•page << [rightBox [TeX `\begin{minipage}{34mm}\begin{flushright}$m_{\mathrm{flow},1}$, $h_{\mathrm{outflow},1}$\\\lstinline!inStream($h_{\mathrm{outflow},1}$)!\end{flushright}\end{minipage}´]] >> [rotate 60°]
-IO..•page << [rightBox [TeX `\begin{minipage}{34mm}\begin{flushright}$m_{\mathrm{flow},2}$, $h_{\mathrm{outflow},2}$\\\lstinline!inStream($h_{\mathrm{outflow},2}$)!\end{flushright}\end{minipage}´]] >> [rotate ~60°]
-IO..•page << [leftBox [TeX `\begin{minipage}{34mm}\lstinline!inStream($h_{\mathrm{outflow},3}$)!\\$m_{\mathrm{flow},3}$, $h_{\mathrm{outflow},3}$\end{minipage}´]]
+•page << @fill:fluid_blue & @width:0.3bp | [fillstroke border]
+•page << permeableDash & @width:0.3bp | [stroke permeablePth]
+•page << [rightBox [TeX `\begin{minipage}{34mm}\begin{flushright}$m_{\mathrm{flow},1}$, $h_{\mathrm{outflow},1}$\\\lstinline!inStream($h_{\mathrm{outflow},1}$)!\end{flushright}\end{minipage}´]] >> [rotate 60°]
+•page << [rightBox [TeX `\begin{minipage}{34mm}\begin{flushright}$m_{\mathrm{flow},2}$, $h_{\mathrm{outflow},2}$\\\lstinline!inStream($h_{\mathrm{outflow},2}$)!\end{flushright}\end{minipage}´]] >> [rotate ~60°]
+•page << [leftBox [TeX `\begin{minipage}{34mm}\lstinline!inStream($h_{\mathrm{outflow},3}$)!\\$m_{\mathrm{flow},3}$, $h_{\mathrm{outflow},3}$\end{minipage}´]]
 
-Traits..@width: 0.8bp
+@width: 0.8bp
 |
 {
-  lbl_x: box_ry * [Numeric..Math..tan 30°] + 1.8mm
-  head: [ShapesArrow width:3bp ...]
-  red:    [Traits..rgb 0.98 0.09 0.03]
-  green:  [Traits..rgb 0.16 0.78 0.02]
-  purple: [Traits..rgb 0.15 0.13 0.53]
+  lbl_x: box_ry * [tan 30°] + 1.8mm
 
-    Traits..@stroke: red
-  & Traits..@fill: red
+    @stroke: flow_red
+  & @fill: flow_red
   |
   {
     c: 0.4 * box_ry * [dir 60°]
-    IO..•page << [Graphics..stroke c--[[rotate 0°] (lbl_x,~1.8mm)]]
-    IO..•page << [Graphics..stroke c--[[rotate 120°] (lbl_x,~2.2mm)]]
-    IO..•page << [Graphics..stroke c--[[rotate 240°] (lbl_x,2mm)] head:head]
-    IO..•page << [Graphics..fill [circle 1.5bp] >> [shift c]]
+    •page << [stroke c--[[rotate 0°] (lbl_x,~1.8mm)]]
+    •page << [stroke c--[[rotate 120°] (lbl_x,~2.2mm)]]
+    •page << [stroke c--[[rotate 240°] (lbl_x,2mm)] head:flow_head]
+    •page << [fill flowJointPth >> [shift c]]
   }
 
-    Traits..@stroke: green
-  & Traits..@fill: green
+    @stroke: flow_green
+  & @fill: flow_green
   |
   {
     c: 0.4 * box_ry * [dir 180°]
-    IO..•page << [Graphics..stroke c--[[rotate 0°] (lbl_x,2mm)] head:head]
-    IO..•page << [Graphics..stroke c--[[rotate 120°] (lbl_x,~1.8mm)]]
-    IO..•page << [Graphics..stroke c--[[rotate 240°] (lbl_x,~2.2mm)]]
-    IO..•page << [Graphics..fill [circle 1.5bp] >> [shift c]]
+    •page << [stroke c--[[rotate 0°] (lbl_x,2mm)] head:flow_head]
+    •page << [stroke c--[[rotate 120°] (lbl_x,~1.8mm)]]
+    •page << [stroke c--[[rotate 240°] (lbl_x,~2.2mm)]]
+    •page << [fill flowJointPth >> [shift c]]
   }
 
-    Traits..@stroke: purple
-  & Traits..@fill: purple
+    @stroke: flow_purple
+  & @fill: flow_purple
   |
   {
     c: 0.4 * box_ry * [dir ~60°]
-    IO..•page << [Graphics..stroke c--[[rotate 0°] (lbl_x,~2.2mm)]]
-    IO..•page << [Graphics..stroke c--[[rotate 120°] (lbl_x,2mm)] head:head]
-    IO..•page << [Graphics..stroke c--[[rotate 240°] (lbl_x,~1.8mm)]]
-    IO..•page << [Graphics..fill [circle 1.5bp] >> [shift c]]
+    •page << [stroke c--[[rotate 0°] (lbl_x,~2.2mm)]]
+    •page << [stroke c--[[rotate 120°] (lbl_x,2mm)] head:flow_head]
+    •page << [stroke c--[[rotate 240°] (lbl_x,~1.8mm)]]
+    •page << [fill flowJointPth >> [shift c]]
   }
 }

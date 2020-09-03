@@ -34,6 +34,8 @@ In addition, unrelated to the figures of the Modelica specification, this reposi
 
 ![Rationale for `inStream`](products/fluidmix3.svg) [PDF](products/fluidmix3.pdf) [source](source/fluidmix3.shape)
 
+![Connection with sensor](products/fluidmix4.svg) [PDF](products/fluidmix4.pdf) [source](source/fluidmix4.shape)
+
 ### Packages
 
 ![The MODELICAPATH](products/modelicapath.svg) [PDF](products/modelicapath.pdf) [source](source/modelicapath.shape)

@@ -1,0 +1,14 @@
+##lookin ..Shapes..Geometry
+##lookin ..Shapes..Traits
+##lookin ..Shapes..Graphics
+
+connectWidth: @width:0.8bp
+flowJointPth: [circle 1.5bp]
+permeableDash: @dash: [dashpattern 2bp 2bp]
+
+fluid_blue: [rgb 0.68 0.85 0.87]
+
+flow_head: [ShapesArrow width:3bp ...]
+flow_red:    [rgb 0.98 0.09 0.03]
+flow_green:  [rgb 0.16 0.78 0.02]
+flow_purple: [rgb 0.15 0.13 0.53]

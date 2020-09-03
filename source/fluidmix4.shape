@@ -1,0 +1,194 @@
+##preamble \usepackage{mlsstyle}
+
+##needs ..Shapes..Layout / centering-X
+##needs ..Applications..Blockdraw
+##needs fluidmix-common.shext
+
+
+##lookin ..Shapes..Graphics
+##lookin ..Shapes..Geometry
+##lookin ..Shapes..Layout
+##lookin ..Shapes..Traits
+##lookin ..Shapes..Data
+##lookin ..Shapes..IO
+##lookin ..Shapes..Numeric..Math
+##lookin ..Applications..Blockdraw
+
+green: [rgb 0.17 0.82 0.09]
+
+box_ry: 10mm
+box_len: 45mm
+flowBoxPth: [rectangle (~0.5*box_len,~box_ry) (0.5*box_len,box_ry)]
+volume_r: 9mm
+volumePth: [circle volume_r]
+sensor_y: 13mm
+sensor_y_top: 13mm + 25mm
+sensorPth:
+  {
+    halfPth: (~5mm,0m)--((+0m),sensor_y)--(~box_ry,(+0m))--((+0m),sensor_y_top)
+    halfPth--[[scale x:~1] [reverse halfPth]]--cycle
+  }
+perm_ry: 6mm
+volume_x: box_len + 20mm
+
+leftFlowPth: flowBoxPth >> [shift (~(0.5*box_len + 5mm),0)]
+rightFlowPth: flowBoxPth >> [shift ((0.5*box_len + 5mm),0)]
+leftVolumePth: volumePth >> [shift (~volume_x,0)]
+rightVolumePth: volumePth >> [shift (volume_x,0)]
+
+bboxed_lbl_enlarge: [bboxed_enlarge xy:(0.3mm,0.3mm) ...]
+
+@fill:fluid_blue & @width:0.3bp
+|
+{
+  •page << [fillstroke sensorPth]
+  •page << [fillstroke leftFlowPth]
+  •page << [fillstroke rightFlowPth]
+  •page << [fillstroke leftVolumePth]
+  •page << [fillstroke rightVolumePth]
+  •page << [fill [rectangle (~volume_x,~perm_ry) (volume_x,perm_ry)]]
+}
+
+(< lblA lblB >):
+@width:0.3bp
+|
+{
+  lblB:
+  {
+    uHelper: (box_len, perm_ry)--(volume_x, (+0m))
+    lHelper: (box_len, ~perm_ry)--(volume_x, (+0m))
+    comp1Pth: rightFlowPth
+    comp2Pth: rightVolumePth
+    ua: [intersection uHelper comp1Pth]
+    ub: [intersection uHelper comp2Pth]
+    la: [intersection lHelper comp1Pth]
+    lb: [intersection lHelper comp2Pth]
+    •page << [stroke ua--ub]
+    •page << [stroke la--lb]
+    •page << permeableDash | [stroke ua.p--la.p]
+    •page << permeableDash | [stroke ub.p--lb.p]
+    [putblockOrigin •page [TeX `$h_{\mathrm{B}}$´] >> center_y >> [shift (ub.p.x + 2mm, 0)]] >> bboxed_lbl_enlarge
+  }
+  lblA:
+  {
+    uHelper: (~box_len, perm_ry)--(~volume_x, (+0m))
+    lHelper: (~box_len, ~perm_ry)--(~volume_x, (+0m))
+    comp1Pth: leftFlowPth
+    comp2Pth: leftVolumePth
+    ua: [intersection uHelper comp1Pth]
+    ub: [intersection uHelper comp2Pth]
+    la: [intersection lHelper comp1Pth]
+    lb: [intersection lHelper comp2Pth]
+    •page << [stroke ua--ub]
+    •page << [stroke la--lb]
+    •page << permeableDash | [stroke ua.p--la.p]
+    •page << permeableDash | [stroke ub.p--lb.p]
+    [putblockOrigin •page [TeX `$h_{\mathrm{A}}$´] >> center_y >> [center_x x:1 ...] >> [shift (ub.p.x - 2mm, 0)]] >> bboxed_lbl_enlarge
+  }
+  {
+    uHelper: (~box_len, perm_ry)--(box_len, (+0m))
+    lHelper: (~box_len, ~perm_ry)--(box_len, (+0m))
+    comp1Pth: leftFlowPth
+    comp2Pth: rightFlowPth
+    ua: [intersection uHelper comp1Pth]
+    ub: [intersection uHelper comp2Pth]
+    la: [intersection lHelper comp1Pth]
+    lb: [intersection lHelper comp2Pth]
+    •page << permeableDash | [stroke ua--ub]
+    •page << [stroke la--lb]
+    •page << permeableDash | [stroke ua.p--la.p]
+    •page << permeableDash | [stroke ub.p--lb.p]
+  }
+  (> lblA lblB <)
+}
+
+lbl1a: [putblockOrigin •page
+  [TeX `\begin{minipage}{41mm}\lstinline!inStream($h_{1\mathrm{a}}$)!\\$h_{1\mathrm{a}}$\\\end{minipage}´]
+  >> center_y >> [shift (2mm, 0)]
+  >> [shift (~(box_len + 5mm),0)]
+] >> bboxed_lbl_enlarge
+lbl1b: [putblockOrigin •page
+  [TeX `\begin{minipage}{41mm}\begin{flushright}~\\$h_{1\mathrm{b}}$\\\lstinline!inStream($h_{1\mathrm{b}}$)!\end{flushright}\end{minipage}´]
+  >> center_y >> [shift (2mm, 0)]
+  >> [shift (~(box_len + 5mm),0)]
+] >> bboxed_lbl_enlarge
+
+lbl2a: [putblockOrigin •page
+  [TeX `\begin{minipage}{41mm}\lstinline!inStream($h_{2\mathrm{a}}$)!\\$h_{2\mathrm{a}}$\\\end{minipage}´]
+  >> center_y >> [shift (2mm, 0)]
+  >> [shift (5mm,0)]
+] >> bboxed_lbl_enlarge
+lbl2b: [putblockOrigin •page
+  [TeX `\begin{minipage}{41mm}\begin{flushright}~\\$h_{2\mathrm{b}}$\\\lstinline!inStream($h_{2\mathrm{b}}$)!\end{flushright}\end{minipage}´]
+  >> center_y >> [shift (2mm, 0)]
+  >> [shift (5mm,0)]
+] >> bboxed_lbl_enlarge
+
+lblSensor: [putblockOrigin •page
+  [TeX `\begin{minipage}{41mm}\lstinline!inStream($h_{3}$)!\\\color{olive}$h_{3}$\end{minipage}´]
+  >> center_y >> [shift (2mm, 0)]
+  >> [rotate 90°] >> [shift (0,sensor_y)]
+] >> bboxed_lbl_enlarge
+{
+  sensor_h_c: [[shift (2mm, 0)] (2mm,~2mm)] >> [rotate 90°] >> [shift (0,sensor_y)]
+  r: 2.5mm
+  •page <<
+    @width:0.5bp | [stroke [[shift sensor_h_c] (~r,~r)--(r,r) & (~r,r)--(r,~r)]]
+}
+
+
+  @stroke:flow_red
+& @fill:flow_red
+& connectWidth
+|
+{
+  •page << [stroke [rightpoint lblA]--[leftpoint lbl1a 3 3] head:flow_head]
+  •page << [stroke ([leftpoint lbl1a 3 3]+(24mm,0))--([rightpoint lbl1b 2 2]-(6mm,0)) head:flow_head]
+  •page << [stroke ([leftpoint lbl2a 3 3]+(24mm,0))--([rightpoint lbl2b 2 2]-(6mm,0)) head:flow_head]
+  c: (~3mm,4mm)
+  •page << [stroke c--[rightpoint lbl1b 2 2]]
+  •page << [stroke c--[leftpoint lbl2a 3 3]]
+  •page << [stroke c--[bottompoint lblSensor 5 1] head:flow_head]
+  •page << [fill flowJointPth >> [shift c]]
+}
+
+  @stroke:flow_purple
+& @fill:flow_purple
+& connectWidth
+|
+{
+  •page << [stroke [leftpoint lblB]--[rightpoint lbl2b 3 1] head:flow_head]
+  •page << [stroke ([rightpoint lbl2b 3 1]-(24.5mm,0))--([leftpoint lbl2a 3 2]+(6mm,0)) head:flow_head]
+  •page << [stroke ([rightpoint lbl1b 3 1]-(24.5mm,0))--([leftpoint lbl1a 3 2]+(6mm,0)) head:flow_head]
+  c: (1mm,1mm)
+  •page << [stroke c--[rightpoint lbl1b 3 1]]
+  •page << [stroke c--[leftpoint lbl2a 3 2]]
+  •page << [stroke c--[bottompoint lblSensor 5 2] head:flow_head]
+  •page << [fill flowJointPth >> [shift c]]
+}
+
+•page <<
+  [TeX `\begin{minipage}{19mm}\begin{center}Volume\\A\end{center}\end{minipage}´]
+    >> [center z:(0, ~1) ...] >> [shift (~volume_x, (box_ry + 2mm))]
+•page <<
+  [TeX `\begin{minipage}{19mm}\begin{center}Volume\\B\end{center}\end{minipage}´]
+    >> [center z:(0, ~1) ...] >> [shift (volume_x, (box_ry + 2mm))]
+•page <<
+  [TeX `\begin{minipage}{19mm}\begin{center}Flow\\1\end{center}\end{minipage}´]
+    >> [center z:(0, ~1) ...] >> [shift (~(0.5*box_len + 5mm), (box_ry + 2mm))]
+•page <<
+  [TeX `\begin{minipage}{19mm}\begin{center}Flow\\2\end{center}\end{minipage}´]
+    >> [center z:(0, ~1) ...] >> [shift ((0.5*box_len + 5mm), (box_ry + 2mm))]
+•page <<
+  [TeX `\begin{minipage}{50mm}\begin{center}Sensor\\3\\\lstinline!m3.c.m_flow(min=0)!\end{center}\end{minipage}´]
+    >> [center z:(0, ~1) ...] >> [shift (0, (sensor_y_top + 2mm))]
+•page <<
+  [TeX `\begin{minipage}{25mm}\begin{center}Connection\\A --- 1a\end{center}\end{minipage}´]
+    >> [center z:(0, 1) ...] >> [shift (~(volume_x - volume_r), ~(box_ry + 2mm))]
+•page <<
+  [TeX `\begin{minipage}{25mm}\begin{center}Connection\\1b --- B\end{center}\end{minipage}´]
+    >> [center z:(0, 1) ...] >> [shift ((volume_x - volume_r), ~(box_ry + 2mm))]
+•page <<
+  [TeX `\begin{minipage}{25mm}\begin{center}Connection\\1b --- 2a\end{center}\end{minipage}´]
+    >> [center z:(0, 1) ...] >> [shift (0, ~(box_ry + 2mm))]
+
