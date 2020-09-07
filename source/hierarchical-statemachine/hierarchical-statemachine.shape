@@ -1,0 +1,121 @@
+##preamble \usepackage{../mlsstyle}
+
+##needs ..Shapes..Layout / centering-X
+##needs ..Applications..Blockdraw
+##needs ../state-machines.shext
+
+
+##lookin ..Shapes..Graphics
+##lookin ..Shapes..Text
+##lookin ..Shapes..Geometry
+##lookin ..Shapes..Layout
+##lookin ..Shapes..Traits
+##lookin ..Shapes..Data
+##lookin ..Shapes..IO
+##lookin ..Shapes..Numeric..Math
+##lookin ..Applications..Blockdraw
+
+stateBlock: \ name body →
+  {
+    title: ((stateNameStyle | (newText << name)) >> center_x >> Xcenter_y)
+    body: (../body >> [center_y y:1 ...] >> [shift (~28mm,~2mm)])
+    (newGroup
+      << title
+      << body
+      << @width:stateBorderWidth & @stroke:stateColor | [stroke [stateRoundRect (~30mm,[bottompoint body].y - 1mm) (30mm,[toppoint title].y + 1mm)]]
+    )
+  }
+
+•state1: newGroup
+
+stateA: [putblockOrigin •state1 [stateBlock `stateA´ [TeX `\begin{minipage}{56mm}\lstinputlisting[language=modelica,frame=none]{stateA.mo}\end{minipage}´]]]
+stateB: [putblockFarBelow •state1 [stateBlock `stateB´ [TeX `\begin{minipage}{56mm}\lstinputlisting[language=modelica,frame=none]{stateB.mo}\end{minipage}´]] stateA]
+stateC: [putblockFarBelow •state1 [stateBlock `stateC´ [TeX `\begin{minipage}{56mm}\lstinputlisting[language=modelica,frame=none]{stateC.mo}\end{minipage}´]] stateB]
+stateD: [putblockFarBelow •state1 [stateBlock `stateD´ [bboxed pointpicture [rectangle (0m,0m) (0m,5mm)]]] stateC]
+
+{
+  pth: [toppoint stateA 3 2]--((+0m),(+8mm)) >> reverse
+  •state1 << transitionStyle | [stroke pth tail:initialStateTail head:resetHead]
+}
+
+{
+  pth: [bottompoint stateA]--[toppoint stateB]
+  •state1 << transitionStyle | [stroke pth head:resetHead]
+  c: [putblockOrigin •state1 [delayedCondition pth]]
+  •state1 << [putlabelLeft [TeX `\lstinline!v >= 6!´] [leftpoint c] 0]
+}
+
+{
+  pth: [bottompoint stateB]--[toppoint stateC]
+  •state1 << transitionStyle | [stroke pth head:resetHead]
+  c: [putblockOrigin •state1 [delayedCondition pth]]
+  •state1 << [putlabelLeft [TeX `\lstinline!v == 0!´] [leftpoint c] 0]
+}
+
+{
+  pth: [bottompoint stateC 3 3]--[toppoint stateD 3 3]
+  •state1 << transitionStyle | [stroke pth head:resetHead]
+  c: [putblockOrigin •state1 [delayedCondition pth]]
+  •state1 << [putlabelRight [TeX `\lstinline!count >= 2!´] [rightpoint c] 0]
+}
+
+{
+  pth: [bottompoint stateC 3 1]--(+(0m,~4mm))>(1%C^)--(1%C^)<(+(~2mm,~2mm))--(~35mm,(+0mm))>(1%C^)--(1%C^)<(+(~2mm,2mm))--((+0mm),6mm)>(1%C^)--(1%C^)<(+(2mm,2mm))--([toppoint stateA 3 1].x-2mm,(+0mm))>(1%C^)--(1%C^)<(+(2mm,~2mm))--[toppoint stateA 3 1]
+  •state1 << transitionStyle | [stroke pth head:resetHead]
+  c: [putblockOrigin •state1 [delayedCondition pth]]
+  •state1 << [putlabelRight [TeX `2: \lstinline!true!´] [rightpoint c] 0]
+}
+
+
+stateX: [putblockOrigin •state1 [stateBlock `stateX´ [TeX `\begin{minipage}{56mm}\lstinputlisting[language=modelica,frame=none]{stateX.mo}\end{minipage}´]] >> [shift (70mm,~20mm)]]
+stateY: [putblockFarBelow •state1 [stateBlock `stateY´ [TeX `\begin{minipage}{56mm}\lstinputlisting[language=modelica,frame=none]{stateY.mo}\end{minipage}´]] stateX]
+
+{
+  pth: [toppoint stateX]--((+0m),(+8mm)) >> reverse
+  •state1 << transitionStyle | [stroke pth tail:initialStateTail head:resetHead]
+}
+
+{
+  pth: [bottompoint stateX]--[toppoint stateY]
+  •state1 << transitionStyle | [stroke pth head:resetHead]
+  c: [putblockOrigin •state1 [delayedCondition pth]]
+  •state1 << [putlabelLeft [TeX `\lstinline!stateX.i > 20!´] [leftpoint c] 0]
+}
+
+•state1 << [TeX `\begin{minipage}{65mm}\lstinputlisting[language=modelica,frame=none]{state1.mo}\end{minipage}´] >> [shift (~45mm,18mm)]
+
+state1:
+  {
+    name: `state1´
+    body: (•state1) >> [center_y y:1 ...] >> [shift (0mm,~2mm)]
+    title: (stateNameStyle | (newText << name)) >> [center z:(0,1) ...] >> [shift [toppoint body]]
+    (newGroup
+      << title
+      << body
+      << @width:stateBorderWidth & @stroke:stateColor | [stroke [stateRoundRect ([leftpoint body].x - 5mm, [bottompoint body].y - 5mm) ([rightpoint body].x + 5mm, [toppoint title].y + 5mm)]]
+    )
+  }
+
+•page << state1
+state2: [putblockFarBelow •page [stateBlock `state2´ [TeX `\begin{minipage}{56mm}\lstinputlisting[language=modelica,frame=none]{state2.mo}\end{minipage}´]] state1]
+
+{
+  pth: [toppoint state1]--((+0m),(+8mm)) >> reverse
+  •page << transitionStyle | [stroke pth tail:initialStateTail head:resetHead]
+}
+
+{
+  pth: [bottompoint state1]--[toppoint state2]
+  •page << transitionStyle | [stroke pth head:resetHead]
+  c: [putblockOrigin •page [delayedCondition pth]]
+  •page << [putlabelBelow [TeX `\lstinline!activeState(state1.stateD) and activeState(state1.stateY)!´] [bottompoint c] 0]
+}
+
+{
+  pth: [bottompoint state2]--(+(0m,~4mm))>(1%C^)--(1%C^)<(+(2mm,~2mm))--(+(55mm,0mm))>(1%C^)--(1%C^)<(+(2mm,2mm))--((+0mm),[bottompoint state1 5 4].y)
+  •page << transitionStyle | [stroke pth head:resetHead]
+  c: [putblockOrigin •page [delayedCondition pth]]
+  •page << [putlabelRight [TeX `\lstinline!v >= 20!´] [rightpoint c] 0]
+}
+
+•page << [TeX `\begin{minipage}{65mm}\lstinputlisting[language=modelica,frame=none]{top.mo}\end{minipage}´] >> [shift (~55mm,10mm)]

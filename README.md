@@ -48,6 +48,8 @@ In addition, unrelated to the figures of the Modelica specification, this reposi
 
 ![Recommended layout](products/statemachine.svg) [PDF](products/statemachine.pdf) [source](source/statemachine.shape)
 
+![Hierarchical state machine](products/hierarchical-statemachine.svg) [PDF](products/hierarchical-statemachine.pdf) [source](source/hierarchical-statemachine.shape)
+
 ### Annotations for Graphical Objects
 
 ![smooth = Bezier](products/bezierpoints.svg) [PDF](products/bezierpoints.pdf) [source](source/bezierpoints.shape)
