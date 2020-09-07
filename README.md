@@ -44,6 +44,10 @@ In addition, unrelated to the figures of the Modelica specification, this reposi
 
 ![Introductory example](products/plantmodel.svg) [PDF](products/plantmodel.pdf) [source](source/plantmodel.shape)
 
+### State Machines
+
+![Recommended layout](products/statemachine.svg) [PDF](products/statemachine.pdf) [source](source/statemachine.shape)
+
 ### Annotations for Graphical Objects
 
 ![smooth = Bezier](products/bezierpoints.svg) [PDF](products/bezierpoints.pdf) [source](source/bezierpoints.shape)

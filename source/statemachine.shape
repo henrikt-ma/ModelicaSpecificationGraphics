@@ -1,0 +1,71 @@
+##preamble \usepackage{mlsstyle}
+
+##needs ..Shapes..Layout / centering-X
+##needs ..Applications..Blockdraw
+##needs state-machines.shext
+
+
+##lookin ..Shapes..Graphics
+##lookin ..Shapes..Text
+##lookin ..Shapes..Geometry
+##lookin ..Shapes..Layout
+##lookin ..Shapes..Traits
+##lookin ..Shapes..Data
+##lookin ..Shapes..IO
+##lookin ..Shapes..Numeric..Math
+##lookin ..Applications..Blockdraw
+
+stateBlock: \ name →
+  {
+    @width:stateBorderWidth & @stroke:stateColor | [stroke [stateRoundRect (~40mm,~5mm) (40mm,5mm)]]
+    &
+    ((stateNameStyle | (newText << name)) >> center)
+  }
+
+state1: [putblockOrigin •page [stateBlock `state1´]]
+state2: [putblockBelow •page [stateBlock `state2´] state1 15mm]
+
+{
+  pth: [toppoint state1]--((+0m),(+8mm)) >> reverse
+  •page << transitionStyle | [stroke pth tail:initialStateTail head:resetHead]
+}
+
+{
+  pth: [bottompoint state1 5 1]--[toppoint state2 5 1]
+  •page << transitionStyle | [stroke pth head:resetHead]
+  c: [putblockOrigin •page [immediateCondition pth]]
+  •page << [putlabelLeft [TeX `a´] [leftpoint c] 0]
+}
+
+{
+  pth: [bottompoint state1 5 2]--[toppoint state2 5 2]
+  •page << transitionStyle | [stroke pth head:resetHead]
+  c: [putblockOrigin •page [delayedCondition pth]]
+  •page << [putlabelLeft [TeX `2:\,b´] [leftpoint c] 0]
+}
+
+{
+  pth: [bottompoint state1 5 3]--[toppoint state2 5 3]
+  •page << transitionStyle | [stroke pth head:normalHead]
+  c: [putblockOrigin •page [immediateCondition pth]]
+  •page << [putlabelLeft [TeX `3:\,c´] [leftpoint c] 0]
+}
+
+{
+  pth: [bottompoint state1 5 4]--[toppoint state2 5 4]
+  •page << transitionStyle | [stroke pth head:normalHead]
+  c: [putblockOrigin •page [delayedCondition pth]]
+  •page << [putlabelLeft [TeX `4:\,d´] [leftpoint c] 0]
+}
+
+{
+  pth: [bottompoint state1 5 5]--[toppoint state2 5 5]
+  •page << transitionStyle | [stroke pth head:resetHead tail:synchronizeTail]
+  c: [putblockOrigin •page [immediateCondition pth]]
+  condHelper: [rightpoint c]--(+(10mm,5mm))
+  •page << conditionHelperStyle | [stroke condHelper]
+  •page << [putlabelRight [TeX `5:\,e´] condHelper.end.p 0]
+}
+
+contents: [bboxed_sym_x (•page)]
+[bboxed contents [bbox contents] 'bleed]

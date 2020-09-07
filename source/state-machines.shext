@@ -1,0 +1,84 @@
+##lookin ..Shapes
+##lookin ..Shapes..Traits
+##lookin ..Shapes..Geometry
+
+stateColor: [gray 95/255]
+transitionLineColor: [gray 175/255]
+stateBorderWidth: 0.3bp
+transitionWidth: 0.8bp /** Thick line to compensate for very light color... **/
+stateNameStyle: Text..@size:9bp & Text..@font:Text..Font..HELVETICA
+
+transitionStyle: @width:transitionWidth & @stroke:transitionLineColor & @fill:transitionLineColor
+conditionHelperStyle: @width:0.3bp & @stroke:transitionLineColor & @fill:transitionLineColor
+
+resetHead: [Graphics..ShapesArrow width:1.5mm frontAngle:40° rearAngle:180° ...]
+
+normalHead: \ p →
+ (Traits..@blend:Blend..NORMAL
+  |
+  {
+    ahAngle:40°
+    z: p.begin.p
+    theLength: 0.5 * 1.5mm / [Numeric..Math..abs 0.5 * ahAngle]
+    l: [Numeric..Math..min theLength 0.9*[Numeric..Math..abs p]]
+    e: p.begin--[p l]
+    (>
+      picture: @cap:Cap..ROUND & @join:Join..MITER |
+        [Graphics..stroke [Geometry..reverse [[shift z]*[rotate ~ahAngle*0.5]*[shift ~z] e]]--[[shift z]*[rotate ahAngle*0.5]*[shift ~z] e]]
+      cut: 0.5*Traits..@width
+    <)
+  }
+ )
+
+synchronizeTail: \ p →
+ (Traits..@blend:Blend..NORMAL
+  |
+  {
+    z: p.begin.p
+    theLength: 2mm
+    sep: 0.5 * theLength
+    l: [Numeric..Math..min theLength 0.9*[Numeric..Math..abs p]]
+    e: p.begin--[p l]
+    (>
+      picture: @cap:Cap..ROUND & @join:Join..MITER |
+        [Graphics..stroke [[shift sep * p.begin.rN] e]--[Geometry..reverse [[shift ~sep * p.begin.rN] e]]]
+      cut: 0m
+    <)
+  }
+ )
+
+initialStateTail: \ p →
+ (Traits..@blend:Blend..NORMAL
+  |
+  {
+    (>
+      picture: @fill:transitionLineColor | [Graphics..fill [circle 1mm] >> [shift p.begin.p]]
+      cut: 0m
+    <)
+  }
+ )
+
+immediateCondition: \ p →
+  {
+    pp: [p ([Numeric..Math..abs p] - 4mm)]
+    len: 1mm
+    transitionStyle | [Graphics..stroke [[shift pp.p] (~len * pp.N)--(len * pp.N)]]
+  }
+
+delayedCondition: \ p →
+  {
+    pp: [p 3mm] /** Will be tight in case there is a synchronizeTail, but looks fine otherwise. **/
+    len: 1mm
+    transitionStyle | [Graphics..stroke [[shift pp.p] (~len * pp.N)--(len * pp.N)]]
+  }
+
+stateRoundRect: \ ll ur →
+  {
+    r: 4mm
+    @defaultunit:1%C |
+    (^~90°)<(ur.x,ll.y+r)--(ur.x,ur.y-r)>(^90°)--
+    (^0°)<(ur.x-r,ur.y)--(ll.x+r,ur.y)>(^180°)--
+    (^90°)<(ll.x,ur.y-r)--(ll.x,ll.y+r)>(^~90°)--
+    (^180°)<(ll.x+r,ll.y)--(ur.x-r,ll.y)>(^0°)--
+    cycle
+  }
