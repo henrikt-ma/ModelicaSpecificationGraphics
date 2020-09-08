@@ -1,0 +1,90 @@
+##preamble \usepackage{mlsstyle}
+
+##needs discrete-time-elements.shext
+##needs ..Shapes..Layout / centering-X
+##needs ..Applications..Blockdraw
+
+
+##lookin ..Shapes..Graphics
+##lookin ..Shapes..Text
+##lookin ..Shapes..String
+##lookin ..Shapes..Geometry
+##lookin ..Shapes..Layout
+##lookin ..Shapes..Traits
+##lookin ..Shapes..Data
+##lookin ..Shapes..IO
+##lookin ..Shapes..Numeric..Math
+##lookin ..Applications..Blockdraw
+
+
+/** Data extracted from OpenModelica CVS result file.
+ ** 1) Keep only columns for 'time' and 'v'.
+ ** 2) Drop all rows with non-integer time.
+ ** 3) Drop extra rows at initial and stop time.
+ ** 4) Keep only the second row for each time value.
+ **/
+rawData: [list (0, 2) (1, 4) (2, 6) (3, 5) (4, 4) (5, 3) (6, 2) (7, 1) (8, 0) (9, 0) (10, 2) (11, 4) (12, 6) (13, 5) (14, 4) (15, 3) (16, 2) (17, 1) (18, 0) (19, 0) (20, 0) (21, 0) (22, 5) (23, 10) (24, 15) (25, 20) (26, 22) (27, 21) (28, 20) (29, 19) (30, 18)]
+tEnd: 30
+
+window_width: 8cm
+window_height: window_width * Shapes..Numeric..Constant..Golden
+
+xMin: 0
+xMax: 33
+
+yMin: ~2
+yMax: 24
+
+xMap: \ x → ((x - xMin) / (xMax - xMin)) * window_width
+yMap: \ y → ((y - yMin) / (yMax - yMin)) * window_height
+
+dataColor: [gray 0.7]
+markSize: 1bp
+mark: @width:0.3bp & @fill:dataColor | [fillstroke [circle markSize]]
+
+•dataView: newGroup
+
+@width:0.3bp & @dash:[dashpattern 2bp 1bp] & @stroke:dataColor & @cap:Cap..BUTT
+|
+[rawData.foldsl
+  \ •dst p e →
+    {
+      x: [xMap e.x]
+      y: [yMap e.y]
+      •dst << [stroke (x,y)--([xMap [min tEnd (e.x + 1)]],(+0m))]
+           << [[shift (x,y)] mark]
+      p
+    }
+  •dataView
+  Shapes..void
+]
+
+tickSize: 3bp
+xTick: \ x →
+  {
+    pth: ([xMap x],0)--((+0m),~tickSize)
+    (@width:0.15bp | [stroke pth])
+    &
+    (@belowlabelmargin:2bp | [putlabelBelow [TeX (newString << x)] pth.end.p 0])
+  }
+yTick: \ y →
+  {
+    /** Vertical centering looks better without the Xcenter_y used by putlabelLeft. **/
+    pth: (0,[yMap y])--(~tickSize,(+0m))
+    (@width:0.15bp | [stroke pth])
+    &
+    (@leftrightlabelmargin:2bp | [[shift pth.end.p - (@leftrightlabelmargin,0)] [center [TeX (newString << y)] (1,0)]])
+  }
+
+•page << [clip (•dataView) [rectangle (0m,0m) (window_width,window_height)]]
+      << @width:0.3bp | [stroke (0,window_height)--(0m,0m)--(window_width,0) tail:ShapesArrow head:ShapesArrow]
+      << [[range 0 xMax 5].foldl \ p e → (p & [xTick e]) null]
+      << [[range 0 yMax 5].foldl \ p e → (p & [yTick e]) null]
+      << [putlabelBelow [TeX `\lstinline!time!´] (window_width,0) 0]
+      << [putlabelLeft [TeX `\lstinline!v!´] (0,window_height) 0]
+
+contents:
+  [[shift (~0.5*window_width,0)] (•page)]
+  >> bboxed_sym_x
+  >> [bboxed_enlarge xy:(0,1bp) ...]
+[bboxed contents [bbox contents] 'bleed]
