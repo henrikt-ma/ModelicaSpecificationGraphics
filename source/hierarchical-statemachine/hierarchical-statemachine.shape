@@ -60,7 +60,7 @@ stateD: [putblockFarBelow •state1 [stateBlock `stateD´ [bboxed pointpicture [
 }
 
 {
-  pth: [bottompoint stateC 3 1]--(+(0m,~4mm))>(1%C^)--(1%C^)<(+(~2mm,~2mm))--(~35mm,(+0mm))>(1%C^)--(1%C^)<(+(~2mm,2mm))--((+0mm),6mm)>(1%C^)--(1%C^)<(+(2mm,2mm))--([toppoint stateA 3 1].x-2mm,(+0mm))>(1%C^)--(1%C^)<(+(2mm,~2mm))--[toppoint stateA 3 1]
+  pth: [bottompoint stateC 3 1]--(+(0m,~6mm))--(~35mm,(+0mm))--((+0mm),8mm)--([toppoint stateA 3 1].x,(+0mm))--[toppoint stateA 3 1] >> roundedPath
   •state1 << transitionStyle | [stroke pth head:resetHead]
   c: [putblockOrigin •state1 [delayedCondition pth]]
   •state1 << [putlabelRight [TeX `2: \lstinline!true!´] [rightpoint c] 0]
@@ -112,7 +112,7 @@ state2: [putblockFarBelow •page [stateBlock `state2´ [TeX `\begin{minipage}{5
 }
 
 {
-  pth: [bottompoint state2]--(+(0m,~4mm))>(1%C^)--(1%C^)<(+(2mm,~2mm))--(+(55mm,0mm))>(1%C^)--(1%C^)<(+(2mm,2mm))--((+0mm),[bottompoint state1 5 4].y)
+  pth: [bottompoint state2]--(+(0m,~6mm))--(+(55mm,0mm))--((+0mm),[bottompoint state1 5 4].y) >> roundedPath
   •page << transitionStyle | [stroke pth head:resetHead]
   c: [putblockOrigin •page [delayedCondition pth]]
   •page << [putlabelRight [TeX `\lstinline!v >= 20!´] [rightpoint c] 0]

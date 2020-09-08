@@ -4,12 +4,27 @@
 
 stateColor: [gray 95/255]
 transitionLineColor: [gray 175/255]
-stateBorderWidth: 0.3bp
-transitionWidth: 0.8bp /** Thick line to compensate for very light color... **/
+stateBorderWidth: 0.3bp / (1 - 95/255) /** Compensate washed out color by making a thicker stroke. **/
+transitionWidth: 0.3bp / (1 - 175/255) /** Thick line to compensate for very light color... **/
 stateNameStyle: Text..@size:9bp & Text..@font:Text..Font..HELVETICA
 
 transitionStyle: @width:transitionWidth & @stroke:transitionLineColor & @fill:transitionLineColor
 conditionHelperStyle: @width:0.3bp & @stroke:transitionLineColor & @fill:transitionLineColor
+
+roundedPath:
+{
+  helper: \ r sl res →
+    {
+      sla: sl - r
+      slb: sl + r
+      [if slb.looped
+        res--sl.p
+        [helper r sl+1 res--sla.p>(1%C^[angle sla.T])--(1%C^[angle slb.rT])<slb.p]
+      ]
+    }
+
+  \ pth r:2mm → [helper r [pth 1] [pth 0].p]
+}
 
 resetHead: [Graphics..ShapesArrow width:1.5mm frontAngle:40° rearAngle:180° ...]
 
