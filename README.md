@@ -26,7 +26,7 @@ In addition, unrelated to the figures of the Modelica specification, this reposi
 
 ![Inside and outside connectors](products/innerouterconnector.svg) [PDF](products/innerouterconnector.pdf) [source](source/innerouterconnector.shape)
 
-![Overconstrained connection graph](products/overconstrained.svg) [PDF](products/overconstrained.pdf) [source](source/overconstrained.shape)
+![Overconstrained connection graph](products/overdetermined.svg) [PDF](products/overdetermined.pdf) [source](source/overdetermined.shape)
 
 ![Fluid connection set](products/fluidsystem.svg) [PDF](products/fluidsystem.pdf) [source](source/fluidsystem.shape)
 
