@@ -48,9 +48,9 @@ legend:
   row0: [putblockOrigin •legend [legendRow node [TeX `Node´]]]
   row1: [putRowBelow •legend [legendRow root [TeX `Root´]] row0]
   row2: [putRowBelow •legend [legendRow potentialRoot [TeX `Potential root´]] row1]
-  row3: [putRowBelow •legend [legendRow (nonbreakableStyle|[Graphics..stroke connectionSeg]) [TeX `\begin{minipage}{4cm}Nonbreakable branch\\(\lstinline!Connections.branch!)\end{minipage}´]] row2]
-  row4: [putRowBelow •legend [legendRow (breakableStyle|[Graphics..stroke connectionSeg]) [TeX `\begin{minipage}{4cm}Breakable branch\\(\lstinline!connect!)\end{minipage}´]] row3]
-  row5: [putRowBelow •legend [legendRow (breakableStyle|[Graphics..stroke connectionSeg] & wiggly) [TeX `\begin{minipage}{4cm}Removed breakable\\branch to get tree\end{minipage}´]] row4]
+  row3: [putRowBelow •legend [legendRow (nonbreakableStyle|[Graphics..stroke connectionSeg]) [TeX `\begin{minipage}{5cm}Required spanning-tree edge\\(\lstinline!Connections.branch!)\end{minipage}´]] row2]
+  row4: [putRowBelow •legend [legendRow (breakableStyle|[Graphics..stroke connectionSeg]) [TeX `\begin{minipage}{5cm}Optional spanning-tree edge\\(from connection set)\end{minipage}´]] row3]
+  row5: [putRowBelow •legend [legendRow (breakableStyle|[Graphics..stroke connectionSeg] & wiggly) [TeX `\begin{minipage}{5cm}Removed optional spanning-tree\\edge to get spanning tree\end{minipage}´]] row4]
   •legend << Traits..@width:0.5bp | [Graphics..stroke [Layout..bbox [Layout..bboxed_enlarge (•legend) (2mm,2mm)]]]
   freeze •legend
 }
