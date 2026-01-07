@@ -1,0 +1,81 @@
+##lookin ..Shapes
+##lookin ..Shapes..Geometry
+##lookin ..Shapes..Numeric..Math
+
+/** Corners of the triangle to be painted.
+ **/
+p1: (~10mm,~5mm)
+p2: (40mm,20mm)
+p3: (~15mm,30mm)
+
+/** Equilateral triangle with corners on the r0 circle.
+ **/
+r0: 25mm
+u1: r0 * [dir 30°]
+u2: r0 * [dir 150°]
+u3: r0 * [dir 270°]
+
+/** For each triangle, find a transform which maps {(0m, 0m), (r, 0m), (0m, r)} to the triangle.
+ ** Then compute the combined transform which maps the equilateral triangle to be painted to the one to be painted.
+ **/
+tf_p: [affinetransform ((p2 - p1) / r0) ((p3 - p1) / r0) p1]
+tf_u: [affinetransform ((u2 - u1) / r0) ((u3 - u1) / r0) u1]
+tf_steiner: tf_p * [inverse tf_u]
+
+/** By symmetry, the r0 circle is the minimal area ellipse encosing the equilateral triangle.
+ ** Since an affine transform has a fixed area scaling, transforming the r0 circle by tf_steiner
+ ** will result in the minimal area ellipse enclosing the triangle to be painted.  (If not, there
+ ** would an enclosing ellipse with smaller are, which when mapped by the inverse of tf_steiner
+ ** would become an ellipse closing the equilateral triangle, but with smaller area then the
+ ** circle.  Contradiction.)
+ **/
+enclosingPath: [tf_steiner [circle r0]]
+
+fillColor: [Traits..rgb 1.0 0.8 0.8]
+lineColor: [Traits..rgb 0.3 0.2 0.2]
+
+matteColor: \ step →
+{
+  alpha: [arcsin step]
+  c: [cos alpha]
+  w: [pow c '3]
+  w * fillColor + (1 - w) * lineColor
+}
+
+rgbinterp:
+{
+  •state: Traits..newColorInterpolator
+  •state << 'reflect
+  [[Data..range 0 1 count:'10].foldsl
+    \ p step •dst → { •dst << step << [matteColor step]   p }
+    void
+    •state]
+  freeze •state
+}
+
+pf: (0mm,0mm)
+pc: (0mm,0mm)
+kf: 0
+kc: 1
+rc: r0
+
+gradient: [rgbinterp.radial_gradient pf pc kf kc rc] >> tf_steiner
+
+testPath: p1--p2--p3--cycle
+
+IO..•page
+  << Traits..@width:0.5bp | [Graphics..fillstroke [circle 3mm] >> [shift p1] fill:lineColor]
+  << Traits..@width:0.5bp | [Graphics..fillstroke [circle 3mm] >> [shift p2] fill:lineColor]
+  << Traits..@width:0.5bp | [Graphics..fillstroke [circle 3mm] >> [shift p3] fill:lineColor]
+  << [Graphics..fill testPath fill:gradient]
+  << Traits..@width:0.15bp | Traits..@dash:[Traits..dashpattern 2mm 2mm] | [Graphics..stroke enclosingPath]
+
+/** Mark the centroid of the triangle to confirm that the enclosing ellipse is the Steiner ellipse.
+ ** That is, the centroid is expected to coincide with the specular highlight of the gradient fill.
+ **/
+|**IO..•page
+|**  << Traits..@width:0.15bp | Traits..@dash:[Traits..dashpattern 2mm 2mm] | [Graphics..stroke p1--(0.5 * (p2 + p3))]
+|**  << Traits..@width:0.15bp | Traits..@dash:[Traits..dashpattern 2mm 2mm] | [Graphics..stroke p2--(0.5 * (p3 + p1))]
+|**  << Traits..@width:0.15bp | Traits..@dash:[Traits..dashpattern 2mm 2mm] | [Graphics..stroke p3--(0.5 * (p1 + p2))]
+
+[Layout..enlarge_bleedbox (IO..•page) (1mm, 1mm)]

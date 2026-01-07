@@ -55,3 +55,12 @@ In addition, unrelated to the figures of the Modelica specification, this reposi
 ### Annotations for Graphical Objects
 
 ![smooth = Bezier](products/bezierpoints.svg) [PDF](products/bezierpoints.pdf) [source](source/bezierpoints.shape)
+
+For the graphics with gradient fills below, beware of bugs in SVG and PDF viewers.
+PNG images are provided for reference.
+
+![fillPattern = HorizontalCylinder](products/cylinder-gradient.svg) [PNG](converted/cylinder-gradient.png) [PDF](converted/cylinder-gradient.pdf) [source](source/cylinder-gradient.shape)
+
+![fillPattern = Sphere on rectangle](products/sphere-gradient.svg) [PNG](converted/sphere-gradient.png) [PDF](converted/sphere-gradient.pdf) [source](source/cylinder-gradient.shape)
+
+![fillPattern = Sphere on triangle](products/sphere-gradient-triangle.svg) [PNG](converted/sphere-gradient-triangle.png) [PDF](converted/sphere-gradient-triangle.pdf) [source](source/cylinder-gradient.shape)

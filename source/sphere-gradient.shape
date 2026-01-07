@@ -1,0 +1,71 @@
+##lookin ..Shapes
+##lookin ..Shapes..Geometry
+##lookin ..Shapes..Numeric..Math
+
+/** Rectangle dimensions
+ **/
+ry: 15mm
+rx: 30mm
+
+/** Minimal area enclosing ellipse.
+ **
+ ** For a square, symmetry gives that the smallest area enclosing ellipse is a circle.
+ **
+ ** For a rectangle, describe the rectangle as an x-scaling of a square.  The same x-scaling
+ ** of the square's smallest area enclosing ellipse results in an ellipse enclosing the rectangle,
+ ** but the question is whether this ellipse has minimal area.  Let kx be the x-scaling factor, and a0
+ ** be the area of the square's enclosing circle.  The area of the x-scaled circle is then kx * a0.
+ ** Suppose, for contradiction, that the x-scaled circle does not have smallest area.  Then there
+ ** would exist another ellipse enclosing the rectangle, having area a1 < kx * a0.  By x-scaling this
+ ** ellipse by 1/kx one obtains an ellipse (not a circle this time) enclosing the square (since the four
+ ** corners of the rectangle will be mapped to the four corners of the square).  The new ellipse enclosing
+ ** the square would have area (1/kx) * a1 < (1/kx) * kx * a0 < a0, contradicting that the circle was the
+ ** minimal area ellipse enclosing the square.  Hence, there is no ellipse with smaller area enclosing
+ ** the rectangle, than the one obtained by x-scaling a circle enclosing a square.
+ **
+ ** Here, the rectangle is constructed by x-scaling a square with radius ry.
+ **/
+rMinor: ry ++ ry
+rMajor: rMinor * (rx / ry)
+
+fillColor: [Traits..rgb 1.0 0.8 0.8]
+lineColor: [Traits..rgb 0.3 0.2 0.2]
+
+matteColor: \ step →
+{
+  alpha: [arcsin step]
+  c: [cos alpha]
+  w: [pow c '3]
+  w * fillColor + (1 - w) * lineColor
+}
+
+rgbinterp:
+{
+  •state: Traits..newColorInterpolator
+  •state << 'reflect
+  [[Data..range 0 1 count:'10].foldsl
+    \ p step •dst → { •dst << step << [matteColor step]   p }
+    void
+    •state]
+  freeze •state
+}
+
+pf: (0mm,0mm)
+pc: (0mm,0mm)
+kf: 0
+kc: 1
+rc: rMinor
+
+gradient: [rgbinterp.radial_gradient pf pc kf kc rc]
+
+testPath: [rectangle (~ry,~ry) (ry,ry)]
+
+enclosingPath: [circle rMinor] >> [scale x:rMajor/rMinor]
+
+IO..•page
+  << Traits..@width:0.5bp | [Graphics..fillstroke [circle 3mm] >> [shift (rx,~ry)] fill:lineColor]
+  << [Graphics..fill testPath fill:gradient] >> [scale x:rMajor/rMinor]
+  << [Graphics..fill (0m,0m)--(5mm,10mm)--(~5mm,10mm)--cycle fill:fillColor]
+  << Traits..@width:0.15bp | Traits..@dash:[Traits..dashpattern 2mm 2mm] | [Graphics..stroke enclosingPath]
+
+[Layout..enlarge_bleedbox [[rotate 15°] (IO..•page)] (1mm, 1mm)]

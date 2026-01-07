@@ -1,0 +1,67 @@
+##lookin ..Shapes
+##lookin ..Shapes..Geometry
+##lookin ..Shapes..Numeric..Math
+
+
+rMinor: 15mm
+rMajor: 30mm
+
+testPath:
+{
+  c: [circle rMinor]
+  [c ~0.5]--[c 2.5] >> [scale x:rMajor/rMinor]
+}
+
+enclosingPath: [rectangle (~rMajor,~rMinor) (rMajor,rMinor)]
+
+fillColor: [Traits..rgb 1.0 0.8 0.8]
+lineColor: [Traits..rgb 0.3 0.2 0.2]
+
+shinyColor: \ step →
+{
+  alpha: [arcsin step]
+  c: [cos alpha]
+  w: 0.9 * [pow c '20] + 0.1 * [pow c '3]
+  w * fillColor + (1 - w) * lineColor
+}
+
+matteColor: \ step →
+{
+  alpha: [arcsin step]
+  c: [cos alpha]
+  w: [pow c '3]
+  w * fillColor + (1 - w) * lineColor
+}
+
+rgbinterp: \ colorInterpolator →
+{
+  •state: Traits..newColorInterpolator
+  •state << 'reflect
+  [[Data..range 0 1 count:'10].foldsl
+    \ p step •dst → { •dst << step << [colorInterpolator step]   p }
+    void
+    •state]
+  freeze •state
+}
+
+pa: (0mm,0mm)
+pb: (0mm,rMinor)
+ka: 0
+kb: 1
+
+testColorInterpolator: \ colorInterpolator →
+{
+  •dst: Graphics..newGroup
+  •dst
+    << Traits..@width:0.5bp | [Graphics..fillstroke [circle 3mm] >> [shift (0,rMinor)] fill:lineColor]
+    << Traits..@width:0.5bp | [Graphics..fillstroke [circle 3mm] >> [shift (~rMajor,0)] fill:fillColor]
+    << [Graphics..fill testPath fill:[[rgbinterp colorInterpolator].linear_gradient pa pb ka kb]]
+    << Traits..@width:0.15bp | Traits..@dash:[Traits..dashpattern 2mm 2mm] | [Graphics..stroke enclosingPath]
+  (•dst) >> [rotate 15°]
+}
+
+IO..•page
+  << [testColorInterpolator shinyColor]
+  << [testColorInterpolator matteColor] >> [shift (70mm, 0m)]
+
+[Layout..enlarge_bleedbox (IO..•page) (1mm, 1mm)]
