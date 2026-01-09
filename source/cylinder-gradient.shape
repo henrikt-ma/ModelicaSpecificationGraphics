@@ -14,8 +14,8 @@ testPath:
 
 enclosingPath: [rectangle (~rMajor,~rMinor) (rMajor,rMinor)]
 
-fillColor: [Traits..rgb 1.0 0.8 0.8]
-lineColor: [Traits..rgb 0.3 0.2 0.2]
+fillColor: [Traits..gray 1]
+lineColor: [Traits..gray 0]
 
 shinyColor: \ step →
 {
@@ -33,12 +33,12 @@ matteColor: \ step →
   w * fillColor + (1 - w) * lineColor
 }
 
-rgbinterp: \ colorInterpolator →
+colorInterpolator: \ stepColor →
 {
   •state: Traits..newColorInterpolator
   •state << 'reflect
   [[Data..range 0 1 count:'10].foldsl
-    \ p step •dst → { •dst << step << [colorInterpolator step]   p }
+    \ p step •dst → { •dst << step << [stepColor step]   p }
     void
     •state]
   freeze •state
@@ -49,13 +49,20 @@ pb: (0mm,rMinor)
 ka: 0
 kb: 1
 
-testColorInterpolator: \ colorInterpolator →
+testColorInterpolator: \ stepColor →
 {
   •dst: Graphics..newGroup
+
+  /** This weird line, hidden behind the ellipse is a workaround for an Inkscape issue.
+   ** If removed, the shape with gradient fill will be missing when converting fro SVG to other formats.
+   **/
   •dst
-    << Traits..@width:0.5bp | [Graphics..fillstroke [circle 3mm] >> [shift (0,rMinor)] fill:lineColor]
-    << Traits..@width:0.5bp | [Graphics..fillstroke [circle 3mm] >> [shift (~rMajor,0)] fill:fillColor]
-    << [Graphics..fill testPath fill:[[rgbinterp colorInterpolator].linear_gradient pa pb ka kb]]
+    << Traits..@width:0bp & Traits..@stroke:fillColor | [Graphics..stroke (0mm,0mm)--(+(0mm,0mm))]
+
+  •dst
+|** << Traits..@width:0.5bp | [Graphics..fillstroke [circle 3mm] >> [shift (0,rMinor)] fill:lineColor]
+|** << Traits..@width:0.5bp | [Graphics..fillstroke [circle 3mm] >> [shift (~rMajor,0)] fill:fillColor]
+    << [Graphics..fill testPath fill:[[colorInterpolator stepColor].linear_gradient pa pb ka kb]]
     << Traits..@width:0.15bp | Traits..@dash:[Traits..dashpattern 2mm 2mm] | [Graphics..stroke enclosingPath]
   (•dst) >> [rotate 15°]
 }

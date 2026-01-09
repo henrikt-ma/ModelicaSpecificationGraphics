@@ -28,8 +28,8 @@ rx: 30mm
 rMinor: ry ++ ry
 rMajor: rMinor * (rx / ry)
 
-fillColor: [Traits..rgb 1.0 0.8 0.8]
-lineColor: [Traits..rgb 0.3 0.2 0.2]
+fillColor: [Traits..gray 1]
+lineColor: [Traits..gray 0]
 
 matteColor: \ step →
 {
@@ -39,7 +39,7 @@ matteColor: \ step →
   w * fillColor + (1 - w) * lineColor
 }
 
-rgbinterp:
+colorInterpolator:
 {
   •state: Traits..newColorInterpolator
   •state << 'reflect
@@ -56,16 +56,22 @@ kf: 0
 kc: 1
 rc: rMinor
 
-gradient: [rgbinterp.radial_gradient pf pc kf kc rc]
+gradient: [colorInterpolator.radial_gradient pf pc kf kc rc]
 
 testPath: [rectangle (~ry,~ry) (ry,ry)]
 
 enclosingPath: [circle rMinor] >> [scale x:rMajor/rMinor]
 
+/** This weird line, hidden behind the triangle is a workaround for an Inkscape issue.
+ ** If removed, the shape with gradient fill will be missing when converting fro SVG to other formats.
+ **/
 IO..•page
-  << Traits..@width:0.5bp | [Graphics..fillstroke [circle 3mm] >> [shift (rx,~ry)] fill:lineColor]
+  << Traits..@width:0bp & Traits..@stroke:fillColor | [Graphics..stroke (0mm,0mm)--(0mm,0mm)]
+
+IO..•page
+|**<< Traits..@width:0.5bp | [Graphics..fillstroke [circle 3mm] >> [shift (rx,~ry)] fill:lineColor]
   << [Graphics..fill testPath fill:gradient] >> [scale x:rMajor/rMinor]
-  << [Graphics..fill (0m,0m)--(5mm,10mm)--(~5mm,10mm)--cycle fill:fillColor]
+|**<< [Graphics..fill (0m,0m)--(5mm,10mm)--(~5mm,10mm)--cycle fill:fillColor]
   << Traits..@width:0.15bp | Traits..@dash:[Traits..dashpattern 2mm 2mm] | [Graphics..stroke enclosingPath]
 
 [Layout..enlarge_bleedbox [[rotate 15°] (IO..•page)] (1mm, 1mm)]
