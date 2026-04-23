@@ -1,0 +1,76 @@
+##lookin ..Shapes
+##lookin ..Shapes..Geometry
+##lookin ..Shapes..Numeric..Math
+
+/** Tuning knob for image size.
+ ** (Only scale geometry, not graphics, to ensure correct line thickness.)
+ **/
+magnification: [scale 0.8]
+
+/** Path to be filled.
+ **/
+test_pth:
+{
+  pth:
+    (~32.0167mm, 32.3667mm)<(~37.45mm, 11.5mm)>(~42.8833mm, ~9.36667mm)--
+    (~29.6667mm, ~19.9mm)<(2.2mm, ~20.1mm)>(34.0667mm, ~20.3mm)--
+    (36.7833mm, ~9.86667mm)<(10.35mm, 11.2mm)>(~16.0833mm, 32.2667mm)--
+    cycle
+  [magnification pth]
+}
+
+/** Minimum area enclosing ellipse (computed externally)
+ ** Center: (-8.796493, 1.205957)
+ ** Semi-major axis: 39.426531
+ ** Semi-minor axis: 22.808421
+ ** Rotation angle: -22.39 degrees
+ **/
+r0: 39.426531mm
+center: (~8.796493mm, 1.205957mm)
+tf_ellipse: magnification * [shift center] * [rotate ~22.39°] * [scale y:22.808421mm/39.426531mm]
+enclosingPath: [circle r0] >> tf_ellipse
+
+fillColor: [Traits..gray 1]
+lineColor: [Traits..gray 0]
+
+matteColor: \ step →
+{
+  alpha: [arcsin step]
+  c: [cos alpha]
+  w: [pow c '3]
+  w * fillColor + (1 - w) * lineColor
+}
+
+rgbinterp:
+{
+  •state: Traits..newColorInterpolator
+  •state << 'reflect
+  [[Data..range 0 1 count:'10].foldsl
+    \ p step •dst → { •dst << step << [matteColor step]   p }
+    void
+    •state]
+  freeze •state
+}
+
+gradient:
+{
+  pf: (0mm,0mm)
+  pc: (0mm,0mm)
+  kf: 0
+  kc: 1
+  rc: r0
+  [rgbinterp.radial_gradient pf pc kf kc rc] >> tf_ellipse
+}
+
+/** This weird line, hidden behind the triangle is a workaround for an Inkscape issue.
+ ** If removed, the shape with gradient fill will be missing when converting fro SVG to other formats.
+ **/
+IO..•page
+  << Traits..@width:0bp & Traits..@stroke:fillColor | [Graphics..stroke [tf_ellipse (0mm,0mm)]--(+(0mm,0mm))]
+
+IO..•page
+|**<< [Graphics..fill [[scale 1.1] enclosingPath] & [reverse enclosingPath] fill:lineColor]
+  << [Graphics..fill test_pth fill:gradient]
+  << Traits..@width:0.15bp | Traits..@dash:[Traits..dashpattern 2mm 2mm] | [Graphics..stroke enclosingPath]
+
+[Layout..enlarge_bleedbox (IO..•page) (1mm, 1mm)]

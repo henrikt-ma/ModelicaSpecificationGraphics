@@ -63,4 +63,6 @@ PNG images are provided for reference.
 
 ![fillPattern = Sphere on rectangle](products/sphere-gradient.svg) [PNG](converted/sphere-gradient.png) [PDF](converted/sphere-gradient.pdf) [source](source/cylinder-gradient.shape)
 
-![fillPattern = Sphere on triangle](products/sphere-gradient-triangle.svg) [PNG](converted/sphere-gradient-triangle.png) [PDF](converted/sphere-gradient-triangle.pdf) [source](source/cylinder-gradient.shape)
+![fillPattern = Sphere on triangle](products/sphere-gradient-triangle.svg) [PNG](converted/sphere-gradient-triangle.png) [PDF](converted/sphere-gradient-triangle.pdf) [source](source/sphere-gradient-triangle.shape)
+
+![fillPattern = Sphere on Bezier shape](products/sphere-gradient-bezier.svg) [PNG](converted/sphere-gradient-bezier.png) [PDF](converted/sphere-gradient-bezier.pdf) [source](source/sphere-gradient-bezier.shape)
